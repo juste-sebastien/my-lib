@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}My Lib'{% endblock %}</title>
+        <link href="{% static 'my_lib/styles.css' %}" rel="stylesheet">
+        {% block script %}
+        {% endblock %}
+    </head>
+    <body>
+
+        <nav class="">
+            <a class="" href="#">Network</a>
+          
+            <div>
+              <ul class="">
+                {% if user.is_authenticated %}
+                    <li class="">
+                        <a class="" href="#"><strong>{{ user.username }}</strong></a>
+                    </li>
+                {% endif %}
+                <li class="">
+                  <a class="" id="link-all-posts" href="{% url 'index' %}">All Posts</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="">
+                        <a class="" id="link-follow" href="#">Following</a>
+                    </li>
+                    <li class="">
+                        <a class="" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="">
+                        <a class="" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="">
+                        <a class="" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+        
+        <div class="body">
+            {% block body %}
+            {% endblock %}
+        </div>
+    </body>
+</html>
