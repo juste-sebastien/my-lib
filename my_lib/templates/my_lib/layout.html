@@ -10,8 +10,8 @@
     </head>
     <body>
 
-        <nav class="">
-            <a class="" href="#">Network</a>
+        <nav class="navbar">
+            <a class="" href="#">My Lib'</a>
           
             <div>
               <ul class="">
@@ -21,11 +21,14 @@
                     </li>
                 {% endif %}
                 <li class="">
-                  <a class="" id="link-all-posts" href="{% url 'index' %}">All Posts</a>
+                  <a class="" id="link-home" href="{% url 'index' %}">Home</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="">
-                        <a class="" id="link-follow" href="#">Following</a>
+                        <a class="" id="link-library" href="#">My Library</a>
+                    </li>
+                    <li class="">
+                        <a class="" id="link-recommendator" href="#">Recommandator</a>
                     </li>
                     <li class="">
                         <a class="" href="{% url 'logout' %}">Log Out</a>

@@ -2,8 +2,38 @@
 {% load static %}
 
 {% block body %}
-    <h1 id="page-title"></h1>
-    
+    <div class="" id="home-container">
+    </div>
+    <div class="" id="profile-container">
+    </div>
+    <div class="" id="books-main-container">
+        <div id="books-header">
+            <h2>My books</h2>
+            <nav>
+                <ul>
+                    <li id="readings-link">Readings</li>
+                    <li id="read-link">Read</li>
+                    <li id="to-read-link">To Read</li>
+                    <li id="all-stars-link">5-Stars</li>
+                </ul>
+            </nav>
+        </div>
+        <div id="books-container"></div>
+    </div>
+    <div class="" id="comment-main-container">
+        <div id="comment-left-arrow"><</div>
+        <div id="comment-container">
+            <div id="zoomed-comment"></div>
+        </div>
+        <div id="comment-right-arrow">></div>
+    </div>
+    <div class="" id="recommendator-main-container">
+        <div>
+            <h2>Reccommendator</h2>
+            <button id="recommendator-button">Refresh</button>
+        </div>
+        <div id="recommendator-container"></div>
+    </div>
 {% endblock %}
 
 {% block script %}
