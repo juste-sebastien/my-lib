@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from django.db import models
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 
 
@@ -14,6 +16,9 @@ class Editor(models.Model):
     """
     name = models.CharField(max_length=64, blank=True)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Author(models.Model):
     """
@@ -27,6 +32,9 @@ class Author(models.Model):
     first_name = models.CharField(max_length=64, blank=True)
     last_name = models.CharField(max_length=64, blank=True)
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class Genre(models.Model):
     """
@@ -38,6 +46,9 @@ class Genre(models.Model):
 
     """
     genre = models.CharField(max_length=64, blank=True)
+
+    def __str__(self):
+        return f'{self.genre}'
 
 
 class Book(models.Model):
@@ -57,12 +68,26 @@ class Book(models.Model):
         blank=True
     )
     title = models.CharField(max_length=128, blank=False, null=False)
-    author = models.OneToOneField(Author, on_delete=models.CASCADE, related_name="book_author")
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name="book_author")
     genre = models.ManyToManyField(Genre, related_name="book_genre")
-    editor = models.OneToOneField(Editor, on_delete=models.CASCADE, related_name="book_editor")
+    editor = models.ForeignKey(Editor, on_delete=models.CASCADE, related_name="book_editor")
     page_nbr = models.IntegerField(blank=True)
-    average_ratings = models.DecimalField(max_digits=3, decimal_places=1, blank=True)
+    average_ratings = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
+    total_readers = models.IntegerField(blank=True, null=True)
+    synopsis = models.TextField(max_length=1000, blank=True, null=True)
+    cover = models.URLField(blank=True, null=True)
     buy_link = models.URLField(blank=True)
+    publication = models.PositiveIntegerField(
+            validators=[
+                MinValueValidator(1000), 
+                MaxValueValidator(datetime.now().year)],
+            help_text="Use the following format: <YYYY>",
+            blank=True,
+            null=True
+    )
+
+    def __str__(self):
+        return f'{self.title}'
 
 
 class User(AbstractUser):
@@ -74,7 +99,13 @@ class User(AbstractUser):
     AbstractUser
 
     """
-    booklist = models.ManyToManyField(Book, related_name="user_booklist")
+    read_list = models.ManyToManyField(Book, related_name="user_readlist")
+    readings_list = models.ManyToManyField(Book, related_name="user_readings_list")
+    to_read_list = models.ManyToManyField(Book, related_name="user_to_read_list")
+    five_stars_list = models.ManyToManyField(Book, related_name="user_five_list")
+
+    def __str__(self):
+        return f'{self.username}'
 
 
 class Comment(models.Model):
@@ -92,6 +123,9 @@ class Comment(models.Model):
     date = models.DateField(auto_now_add=True)
     content = models.TextField(max_length=1000)
 
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.book.title}'
+
 
 class Note(models.Model):
     """
@@ -105,3 +139,6 @@ class Note(models.Model):
     note = models.DecimalField(max_digits=3, decimal_places=2)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     book = models.OneToOneField(Book, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Note by {self.user.username} on {self.book.title}'
