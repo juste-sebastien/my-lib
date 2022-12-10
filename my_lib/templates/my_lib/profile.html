@@ -1,0 +1,19 @@
+{% extends "my_lib/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header" id="profile-header"></div>
+        <div  class="card-container">
+            <div class="arrow"><</div>
+            <div class="card-inner-container" id="comment-container">
+                <div class="zoomed-card"></div>
+            </div>
+            <div class="arrow">></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="module" src="{% static 'my_lib/main.js' %}"></script>
+{% endblock %}

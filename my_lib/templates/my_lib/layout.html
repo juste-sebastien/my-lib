@@ -17,7 +17,7 @@
               <ul class="">
                 {% if user.is_authenticated %}
                     <li class="">
-                        <a class="" href="#"><strong>{{ user.username }}</strong></a>
+                        <a class="" href="{% url 'profile' 'my-profile'%}"><strong>{{ user.username }}</strong></a>
                     </li>
                 {% endif %}
                 <li class="">
@@ -25,10 +25,10 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="">
-                        <a class="" id="link-library" href="#">My Library</a>
+                        <a class="" id="link-library" href="{% url 'library' %}">My Library</a>
                     </li>
                     <li class="">
-                        <a class="" id="link-recommendator" href="#">Recommandator</a>
+                        <a class="" id="link-recommendator" href="{% url 'recommendator' %}">Recommandator</a>
                     </li>
                     <li class="">
                         <a class="" href="{% url 'logout' %}">Log Out</a>

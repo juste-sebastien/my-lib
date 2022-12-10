@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 from .models import *
+from .utils import *
 
 
 def index(request):
@@ -24,6 +25,30 @@ def index(request):
     render():
         The rendering of the index webpage
     """
+    # Check if GET request contain a search
+    if request.GET.__contains__("search"):
+        search = request.GET.get("search")
+        if request.GET.__contains__("author"):
+            if request.GET.get("author") == "on":
+                author = True
+            else:
+                author = False
+        elif request.GET.__contains__("bookname"):
+            if request.GET.get("bookname") == "on":
+                bookname = True
+            else:
+                bookname = False
+
+        # Get the booklist corresponding to the search
+        # and send it to fetch request in JS
+        try:
+            booklist = get_searched_books(search, author, bookname)
+        except Book.DoesNotExist:
+            return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
+        else:
+            return JsonResponse([book for book in booklist], safe=False)
+
+    # In every case rendering index.html
     return render(request, "my_lib/index.html", {
         "books": Book.objects.all(),
     })
@@ -123,3 +148,20 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "my_lib/register.html")
+
+
+def library(request):
+    return render(request, "my_lib/library.html")
+
+
+def profile(request, profile):
+    if profile == "my-profile":
+        return render(request, "my_lib/my_profile.html")
+    else:
+        return render(request, "my_lib/profile.html", {
+
+        })
+
+
+def recommendator(request):
+    return render(request, "my_lib/recommendator.html")

@@ -1,0 +1,29 @@
+{% extends "my_lib/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="card" id="books-main-container">
+        <div class="card-header" id="books-header">
+            <h2 class="card-title">My books</h2>
+            <nav class="navbar">
+                <ul>
+                    <li id="readings-link">Readings</li>
+                    <li id="read-link">Read</li>
+                    <li id="to-read-link">To Read</li>
+                    <li id="all-stars-link">5-Stars</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="card-container" id="books-body">
+            <div class="arrow"><</div>
+                <div class="card-inner-container" id="books-container">
+                <div class="zoomed-card"></div>
+                </div>
+            <div class="arrow">></div>
+        </div>
+   </div>
+{% endblock %}
+
+{% block script %}
+    <script type="module" src="{% static 'my_lib/main.js' %}"></script>
+{% endblock %}

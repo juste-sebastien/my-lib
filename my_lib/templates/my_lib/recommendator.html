@@ -1,0 +1,16 @@
+{% extends "my_lib/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="card" id="recommendator-main-container">
+        <div class="card-header">
+            <h2 class="card-title">Reccommendator</h2>
+            <button class="button" id="recommendator-button">Refresh</button>
+        </div>
+        <div id="recommendator-container"></div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="module" src="{% static 'my_lib/main.js' %}"></script>
+{% endblock %}
