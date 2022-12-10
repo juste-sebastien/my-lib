@@ -89,6 +89,23 @@ class Book(models.Model):
     def __str__(self):
         return f'{self.title}'
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author_first_name": self.author.first_name,
+            "author_last_name": self.author.last_name,
+            "genre": [genre.genre for genre in self.genre.all()],
+            "editor": self.editor.name,
+            "page_nb":  self.page_nbr,
+            "average_ratings": self.average_ratings,
+            "total_readers": self.total_readers,
+            "synopsis": self.synopsis,
+            "cover": self.cover,
+            "buy_link": self.buy_link,
+            "publication": self.publication
+        }
+
 
 class User(AbstractUser):
     """

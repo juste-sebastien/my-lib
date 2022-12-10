@@ -1,3 +1,5 @@
+import { generateBookCard } from "./generators.js";
+
 // Defining all variables
 const navBar = document.querySelector('.navbar');
 const linkHome = document.querySelector('#link-home');
@@ -7,8 +9,10 @@ if (document.querySelector('#link-library')) {
 }
 var linkRecommendator = '';
 if (document.querySelector('#link-recommendator')) {
-  submitPost = document.querySelector('#link-recommendator');
+  linkRecommendator = document.querySelector('#link-recommendator');
 }
+
+export const profileContainer = '';
 
 
 // Add EventListener on some elements
@@ -48,13 +52,45 @@ function loadPage(name) {
 
 
 function loadIndex() {
-  const searchButton = document.querySelector('#home-search-button');
-  const homeContainer = document.querySelector('#home-container');
+  const searchElement = {
+    button: document.querySelector('#home-search-button'),
+    container: document.querySelector('#home-container'),
+    input: document.querySelector('#search'),
+    author: document.querySelector('#author-radio'),
+    bookname: document.querySelector('#bookname-radio'),
+  }
 
-  homeContainer.textContent = 'Begin to search a book';
+  var url = `?search=${searchElement.input.value}`;
 
-  searchButton.addEventListener('click', () => {
-    homeContainer.textContent = 'Groovy!';
+  if (searchElement.author.checked) {
+    url = url.concat('&author=on');
+  }
+
+  if (searchElement.bookname.checked) {
+    url = url.concat('&bookname=on');
+  }
+
+  searchElement.container.innerHTML = `
+    <div>Welcome to MyLib' </div>
+  `
+  console.log(url);
+  searchElement.button.addEventListener('click', () => {
+    fetch(url)
+        .then(response => response.json())
+        .then(books => {
+          searchElement.container.innerHTML = '';
+          books.forEach(book => {
+            searchElement.container.appendChild(generateBookCard(book));
+          });
+        })
+        .then(() => {
+          searchElement.author.checked = false;
+          searchElement.bookname.checked = false;
+          searchElement.input.value = '';
+        })
+        .catch(error => {
+        console.log('Error: ', error);
+        })
   })
 }
 

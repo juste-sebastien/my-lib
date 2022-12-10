@@ -1,7 +1,7 @@
 import { 
     profileContainer, 
     zoomOnComment 
-} from "./main";
+} from "./main.js";
 
 /**
  * Generate user profile
@@ -79,7 +79,7 @@ export function generateZoomedComment(comment, book) {
  * 
  * @return {HTMLElement} bookContainer
  */
-export function generateBookCard(book, note) {
+export function generateBookCard(book, note='N/A') {
     // Todo -> mettre les classes 
     let bookContainer = document.createElement('div');
     bookContainer.className = '';
@@ -87,7 +87,7 @@ export function generateBookCard(book, note) {
         <img src="${book.cover}" alt="${book.title} cover" />
         <div>
             <h4>${book.title}</h4>
-            <div>${note.note}</div>
+            <div>${note}</div>
             <div>${book.author}</div>
             <div>Average: ${book.average}</div>
             <div>Total readers: ${book.readers}</div>

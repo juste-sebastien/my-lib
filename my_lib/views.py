@@ -28,16 +28,14 @@ def index(request):
     # Check if GET request contain a search
     if request.GET.__contains__("search"):
         search = request.GET.get("search")
+        author = False
+        bookname = False
         if request.GET.__contains__("author"):
             if request.GET.get("author") == "on":
                 author = True
-            else:
-                author = False
-        elif request.GET.__contains__("bookname"):
+        if request.GET.__contains__("bookname"):
             if request.GET.get("bookname") == "on":
                 bookname = True
-            else:
-                bookname = False
 
         # Get the booklist corresponding to the search
         # and send it to fetch request in JS
@@ -46,7 +44,7 @@ def index(request):
         except Book.DoesNotExist:
             return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
         else:
-            return JsonResponse([book for book in booklist], safe=False)
+            return JsonResponse([book.serialize() for book in booklist], safe=False)
 
     # In every case rendering index.html
     return render(request, "my_lib/index.html", {
