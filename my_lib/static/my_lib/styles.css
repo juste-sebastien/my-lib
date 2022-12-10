@@ -1,3 +1,13 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+body {
+  margin: 0 1vw;
+}
+
 a {
     text-decoration: none;
   }
@@ -14,6 +24,7 @@ a {
   
   .navbar {
     flex-grow: 0.6;
+    max-width: 50vw;
   }
   
   .card {
