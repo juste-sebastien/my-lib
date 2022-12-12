@@ -1,4 +1,5 @@
 import { generateBookCard } from "./generators.js";
+import { getCookie } from "./utils.js";
 
 // Defining all variables
 const containers = {
@@ -128,11 +129,18 @@ function getResearch(element){
 
 
 export function addToBooklist(listName, book) {
-  fetch(`/add-to-list/${listName}&&${book['id']}`, {
+  fetch(`/add-to-list/`, {
     method: 'PUT',
-    body: JSON.stringify({ read : false })
+    body: JSON.stringify({
+       list: listName,
+       book: `${book['id']}`
+    }),
+    credentials: 'same-origin',
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken")
+      }
   })
-  .then(response => load_mailbox('inbox'))
+  .then(response => console.log(response))
   .catch(error => {
     console.log('Error: ', error);
   });

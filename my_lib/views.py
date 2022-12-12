@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -25,26 +27,27 @@ def index(request):
     render():
         The rendering of the index webpage
     """
-    # Check if GET request contain a search
-    if request.GET.__contains__("search"):
-        search = request.GET.get("search")
-        author = False
-        bookname = False
-        if request.GET.__contains__("author"):
-            if request.GET.get("author") == "on":
-                author = True
-        if request.GET.__contains__("bookname"):
-            if request.GET.get("bookname") == "on":
-                bookname = True
+    if request.method == 'GET':
+        # Check if GET request contain a search
+        if request.GET.__contains__("search"):
+            search = request.GET.get("search")
+            author = False
+            bookname = False
+            if request.GET.__contains__("author"):
+                if request.GET.get("author") == "on":
+                    author = True
+            if request.GET.__contains__("bookname"):
+                if request.GET.get("bookname") == "on":
+                    bookname = True
 
-        # Get the booklist corresponding to the search
-        # and send it to fetch request in JS
-        try:
-            booklist = get_searched_books(search, author, bookname)
-        except Book.DoesNotExist or Author.DoesNotExist:
-            return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
-        else:
-            return JsonResponse([book.serialize() for book in booklist], safe=False)
+            # Get the booklist corresponding to the search
+            # and send it to fetch request in JS
+            try:
+                booklist = get_searched_books(search, author, bookname)
+            except Book.DoesNotExist or Author.DoesNotExist:
+                return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
+            else:
+                return JsonResponse([book.serialize() for book in booklist], safe=False)
 
     # In every case rendering index.html
     return render(request, "my_lib/index.html", {
@@ -163,3 +166,44 @@ def profile(request, profile):
 
 def recommendator(request):
     return render(request, "my_lib/recommendator.html")
+
+@login_required
+def add_to_list(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        list_to = str(data.get("list"))
+        book_id = int(data.get("book"))
+
+        book = Book.objects.get(id=book_id)
+        user = User.objects.get(username=request.user)
+
+        match list_to:
+            case "readings":
+                if book in user.readings_list.all():
+                    user.readings_list.remove(book)
+                else:
+                    user.readings_list.add(book)
+            case "read":
+                if book in user.read_list.all():
+                    user.read_list.remove(book)
+                else:
+                    user.read_list.add(book)
+            case "to_read":
+                if book in user.to_read_list.all():
+                    user.to_read_list.remove(book)
+                else:
+                    user.to_read_list.add(book)
+            case "stars":
+                if book in user.five_stars_list.all():
+                    user.five_stars_list.remove(book)
+                else:
+                    user.five_stars_list.add(book)
+            case _:
+                return JsonResponse({"error": "You can't add it to yhis list."}, status=400)
+
+        user.save()
+
+        response = {
+            'comment': 'ok'
+        }
+        return JsonResponse(response, status=200)
