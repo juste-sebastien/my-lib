@@ -13,4 +13,5 @@ urlpatterns = [
 
     # API Routes
     path("search/", views.index, name="search"),
+    path("add-to-list/<str:adding>", views.index, name="add_to_list")
 ]

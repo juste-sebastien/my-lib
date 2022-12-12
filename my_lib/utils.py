@@ -20,24 +20,46 @@ def get_searched_books(search, statement1, statement2):
         contain list of books
     """
     booklist = []
-    search = str(search).strip().lower().title()
+    search = sanitize(str(search).strip())
+    
     if statement1:
-        try:
-            author = Author.objects.get(first_name=search)
-        except Author.DoesNotExist:
-            author = Author.objects.get(last_name=search)
+        found_author = ''
+        for author in Author.objects.all():
+            f_name_normalize = sanitize(author.first_name)
+            l_name_normalize = sanitize(author.last_name)
+            if search in f_name_normalize:
+                found_author = author
+            elif search in l_name_normalize:
+                found_author = author
 
+        if found_author != "":
+            booklist = Book.objects.filter(author=found_author).all()
         
-        for book in Book.objects.all():
-            if book.author.id == author.id:
-                booklist.append(book)
     
     if statement2:
-        try:
-            book = Book.objects.get(title=search)
-        except Book.DoesNotExist:
-            raise Book.DoesNotExist
-        else:
-            booklist.append(book)
+        for book in Book.objects.all():
+            title_normalize = sanitize(book.title)
+            if search in title_normalize:
+                booklist.append(book)
+
+    if len(booklist) == 0:
+        raise Book.DoesNotExist
 
     return booklist
+
+
+def sanitize(text):
+    """
+    Sanitize a string to escape accentuated chars
+
+    Parameters
+    ----------
+    text: str
+        the content to sanitize
+
+    Return
+    ------
+    text.encode(): str
+        sanitized text
+    """
+    return text.casefold().encode('ascii', errors='ignore')

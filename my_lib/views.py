@@ -41,7 +41,7 @@ def index(request):
         # and send it to fetch request in JS
         try:
             booklist = get_searched_books(search, author, bookname)
-        except Book.DoesNotExist:
+        except Book.DoesNotExist or Author.DoesNotExist:
             return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
         else:
             return JsonResponse([book.serialize() for book in booklist], safe=False)
