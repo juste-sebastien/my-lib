@@ -40,14 +40,31 @@ def index(request):
                 if request.GET.get("bookname") == "on":
                     bookname = True
 
+            if request.user.is_authenticated:
+                user = User.objects.get(username=request.user)
             # Get the booklist corresponding to the search
             # and send it to fetch request in JS
             try:
-                booklist = get_searched_books(search, author, bookname)
+                temp_booklist = get_searched_books(search, author, bookname)
             except Book.DoesNotExist or Author.DoesNotExist:
                 return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
             else:
-                return JsonResponse([book.serialize() for book in booklist], safe=False)
+                booklist = []
+
+                for book in temp_booklist:
+                    book = book.serialize()
+                    if user: 
+                        book["is_readings"] = True if book in user.readings_list.all() else False
+                        book["is_read"] = True if book in user.read_list.all() else False
+                        book["is_to_read"] = True if book in user.to_read_list.all() else False
+                        book["is_stars"] = True if book in user.five_stars_list.all() else False
+                    booklist.append(book)
+                    
+                response = {
+                    "connected": True if user else False,
+                    "booklist": booklist,
+                }
+                return JsonResponse(response, status=200)
 
     # In every case rendering index.html
     return render(request, "my_lib/index.html", {
@@ -169,6 +186,19 @@ def recommendator(request):
 
 @login_required
 def add_to_list(request):
+    """
+    Add selected book to user's custom list
+
+    Parameters
+    ----------
+    request: WSGIRequest
+        Represent the browser request
+
+    Return
+    ------
+    JsonResponse:
+        status code ok
+    """
     if request.method == "PUT":
         data = json.loads(request.body)
         list_to = str(data.get("list"))
@@ -181,29 +211,40 @@ def add_to_list(request):
             case "readings":
                 if book in user.readings_list.all():
                     user.readings_list.remove(book)
+                    action = 'deleted'
                 else:
                     user.readings_list.add(book)
+                    action = 'added'
+                list_name = "readings"
             case "read":
                 if book in user.read_list.all():
                     user.read_list.remove(book)
+                    action = 'deleted'
                 else:
                     user.read_list.add(book)
+                    action = 'added'
+                list_name = "read"
             case "to_read":
                 if book in user.to_read_list.all():
                     user.to_read_list.remove(book)
+                    action = 'deleted'
                 else:
                     user.to_read_list.add(book)
+                    action = 'added'
+                list_name = "to read"
             case "stars":
                 if book in user.five_stars_list.all():
                     user.five_stars_list.remove(book)
+                    action = 'deleted'
                 else:
                     user.five_stars_list.add(book)
+                    action = 'added'
+                list_name = "5 stars"
             case _:
-                return JsonResponse({"error": "You can't add it to yhis list."}, status=400)
-
+                return JsonResponse({"error": "You can't add it to this list."}, status=400)
         user.save()
 
         response = {
-            'comment': 'ok'
+            'comment': f"{book.title} was {action} to your {list_name}'s list"
         }
         return JsonResponse(response, status=200)

@@ -1,4 +1,4 @@
-import { generateBookCard } from "./generators.js";
+import { generateBookCard, } from "./generators.js";
 import { getCookie } from "./utils.js";
 
 // Defining all variables
@@ -9,6 +9,34 @@ const containers = {
   profileOf: document.querySelector('#other-profile-container'),
   recommendator: document.querySelector('#recommendator-main-container')
 }
+
+var searchButton = '';
+if (document.querySelector('#home-search-button')) {
+  searchButton = document.querySelector('#home-search-button');
+  searchButton.addEventListener('click', () => {
+    getResearch();
+  });
+};
+
+var searchContainer = '';
+ if(document.querySelector('#home-container')) {
+  searchContainer = document.querySelector('#home-container');
+ }
+
+ var searchInput = '';
+ if (document.querySelector('#search')) {
+  searchInput = document.querySelector('#search');
+ }
+
+ var searchAuthor = '';
+ if (document.querySelector('#author-radio')){
+  searchAuthor = document.querySelector('#author-radio');
+ }
+
+ var searchBookname = '';
+ if (document.querySelector('#bookname-radio')) {
+  searchBookname = document.querySelector('#bookname-radio')
+ }
 
 const linkHome = document.querySelector('#link-home');
 var linkLibrary = '';
@@ -45,29 +73,20 @@ document.addEventListener('DOMContentLoaded', function() {
  * @param {string} name - the name of webpage
  */
 function loadPage(name) {
-  if (name === 'index'){
-    let searchElement = {
-      button: document.querySelector('#home-search-button'),
-      container: document.querySelector('#home-container'),
-      input: document.querySelector('#search'),
-      author: document.querySelector('#author-radio'),
-      bookname: document.querySelector('#bookname-radio'),
-    };
-  
-    searchElement.button.addEventListener('click', () => {
-      getResearch(searchElement);
-    });
-  } else if (name === 'books') {
-      loadLibrary();
+  if (name === 'books') {
+      loadLibrary(name);
   } else if (name === 'reco') {
       loadRecommendator();
-  } else {
-      loadPage('index');
   }
 }
 
-function loadLibrary() {
-  console.log('lib runs');
+function loadLibrary(place) {
+  const bookHeader = document.querySelector('#books-header');
+  var headerAppend = [];
+  //const navBar = generateNavBar(headerAppend, place);
+
+  console.log(navBar);
+  
 }
 
 
@@ -97,37 +116,44 @@ export function zoomOnComment(comment, book) {
  * Find books corresponding to user's research 
  * and display then in a card
  * 
- * @param {*} element - search element
  */
-function getResearch(element){
-  var url = `/search/?search=${element.input.value}`;
+function getResearch(){
+  var url = `/search/?search=${searchInput.value}`;
 
-  if (element.author.checked) {
+  if (searchAuthor.checked) {
     url = url.concat('&author=on');
   };
 
-  if (element.bookname.checked) {
+  if (searchBookname.checked) {
     url = url.concat('&bookname=on');
   };
   fetch(url)
       .then(response => response.json())
-      .then(books => {
-        element.container.innerHTML = '';
-        books.forEach(book => {
-          element.container.appendChild(generateBookCard(book));
+      .then(response => {
+        searchContainer.innerHTML = '';
+        response.booklist.forEach(book => {
+          searchContainer.appendChild(generateBookCard(
+            book,
+            response.connected
+          ));
         });
       })
       .then(() => {
-        element.author.checked = false;
-        element.bookname.checked = false;
-        element.input.value = '';
+        searchAuthor.checked = false;
+        searchBookname.checked = false;
+        searchInput.value = '';
       })
       .catch(error => {
       console.log('Error: ', error);
       });
 }
 
-
+/**
+ * Send to api a book to add to a specific list
+ * 
+ * @param {string} listName - name of list
+ * @param {object} book - object return by api
+ */
 export function addToBooklist(listName, book) {
   fetch(`/add-to-list/`, {
     method: 'PUT',
@@ -144,4 +170,9 @@ export function addToBooklist(listName, book) {
   .catch(error => {
     console.log('Error: ', error);
   });
+}
+
+
+export function loadCustomList(buttonContent) {
+
 }

@@ -2,12 +2,18 @@ import {
     profileContainer, 
     zoomOnComment,
     addToBooklist,
+    loadCustomList,
 } from "./main.js";
 
 import {
     createElementAndApplyProperties,
 } from './utils.js';
 
+// Define all variables
+const textAlert = [
+    "Added to your list",
+    "Removed from your list"
+]
 
 /**
  * Generate user profile
@@ -86,24 +92,44 @@ export function generateZoomedComment(comment, book) {
  * 
  * @param {*} note - note of a book given by a user
  * @param {*} book - informations concerning a book
+ * @param {bool} status - true if user is authenticated, false instead
  * 
  * @return {HTMLElement} bookContainer
  */
-export function generateBookCard(book, note='N/A') {
+export function generateBookCard(book, status,note='N/A') {
     // Todo -> mettre les classes 
     // Define an empty Array
     const toAppend = [];
+    
+    // Create card header
+    const bookHeader = createElementAndApplyProperties('div', [
+        {name: 'className', value: 'bookcard-header'},
+        {
+            name: 'style', 
+            subProperty: 'visibility',
+            value: (status === true) ? 'visible' : 'hidden',
+        }
+    ]);
 
-    // Create top navbar
+    const bookAlert = createElementAndApplyProperties('div', [
+        { name: 'className', value: 'bookcard-header-alert' }
+    ]);
+
+    // Create dropdown 
     // Create readings Button
     const readingsButton = createElementAndApplyProperties('li', [
         {name: 'style', subProperty: 'cursor', value: 'pointer'},
         {name: 'textContent', value: 'Readings'},
     ]);
     readingsButton.addEventListener('click', function() {
-        addToBooklist('readings', book);
-    }
-);
+            addToBooklist('readings', book);
+            bookAlert.textContent = (book["is_readings"] === true) ? textAlert[1] : textAlert[0];
+            book["is_readings"] = !book["is_readings"];
+            bookAlert.classList.add('bookcard-alert-display');
+            setInterval(() => {
+                bookAlert.classList.remove('bookcard-alert-display');
+            }, 4000);
+    });
     const readingsImage = createElementAndApplyProperties('img', [
         {name: 'src', value: ''},
         {name: 'alt', value: ' 📖'},
@@ -116,9 +142,14 @@ export function generateBookCard(book, note='N/A') {
         {name: 'textContent', value: 'Read'},
     ]);
     readButton.addEventListener('click', function() {
-                addToBooklist('read', book);
-            }
-    );
+            addToBooklist('read', book);
+            bookAlert.textContent = (book["is_read"] === true) ? textAlert[1] : textAlert[0];
+            book["is_read"] = !book["is_read"];
+            bookAlert.classList.add('bookcard-alert-display');
+            setInterval(() => {
+                bookAlert.classList.remove('bookcard-alert-display');
+            }, 4000);
+    });
     const readImage = createElementAndApplyProperties('img', [
         {name: 'src', value: ''},
         {name: 'alt', value: ' ✔'},
@@ -131,9 +162,14 @@ export function generateBookCard(book, note='N/A') {
         {name: 'textContent', value: 'To read'},
     ]);
     toReadButton.addEventListener('click', function() {
-        addToBooklist('to_read', book);
-    }
-);
+            addToBooklist('to_read', book);
+            bookAlert.textContent = (book["is_to_read"] === true) ? textAlert[1] : textAlert[0];
+            book["is_to_read"] = !book["is_to_read"];
+            bookAlert.classList.add('bookcard-alert-display');
+            setInterval(() => {
+                bookAlert.classList.remove('bookcard-alert-display');
+            }, 4000);
+    });
     const toReadImage = createElementAndApplyProperties('img', [
         {name: 'src', value: ''},
         {name: 'alt', value: ' 📚'},
@@ -146,24 +182,41 @@ export function generateBookCard(book, note='N/A') {
         {name: 'textContent', value: '5 Stars'},
     ]);
     starsButton.addEventListener('click', function() {
-        addToBooklist('stars', book);
-    }
-);
+            addToBooklist('stars', book);
+            bookAlert.textContent = (book["is_stars"] === true) ? textAlert[1] : textAlert[0];
+            book["is_stars"] = !book["is_stars"];
+            bookAlert.classList.add('bookcard-alert-display');
+            setInterval(() => {
+                bookAlert.classList.remove('bookcard-alert-display');
+            }, 4000);
+    });
     const starsImage = createElementAndApplyProperties('img', [
         {name: 'src', value: ''},
         {name: 'alt', value: ' 🏆'},
 
     ]);
 
-    // Create navbar
-    const navBar = createElementAndApplyProperties('nav', [
-        {name: 'className', value: 'book-navbar'},
+    // Create dropdown inner list
+    const innerDropdown = createElementAndApplyProperties('ul', [
+        {name: 'className', value: 'ul-inner-dropdown menu'},
     ]);
 
-    // And inner list
-    const ul = createElementAndApplyProperties('ul', [
-        {name: 'textContent', value: 'Add to list:'},
+    const dropDowntitle = createElementAndApplyProperties('h2', [
+        {name: 'textContent', value: 'Add to'},
+        {name: 'className', value: 'icon'},
     ]);
+
+    const dropdownContainer = createElementAndApplyProperties('div', [
+        {name: 'className', value: 'dropdown closed'},
+    ]);
+
+    dropdownContainer.addEventListener('click', function() {
+        if (dropdownContainer.classList.contains('closed')) {
+            dropdownContainer.classList.remove('closed')
+          } else {
+            dropdownContainer.classList.add('closed')    
+          }
+    });
     
     toAppend.push(
         {
@@ -183,27 +236,41 @@ export function generateBookCard(book, note='N/A') {
             element: starsImage,
         },
         {
-            target: ul,
+            target: innerDropdown,
             element: readingsButton,
         },
         {
-            target: ul,
+            target: innerDropdown,
             element: readButton,
         },
         {
-            target: ul,
+            target: innerDropdown,
             element: toReadButton,
         },
         {
-            target: ul,
+            target: innerDropdown,
             element: starsButton,
         },
         {
-            target: navBar,
-            element: ul,
+            target: dropdownContainer,
+            element: dropDowntitle,
+        },
+        {
+            target: dropdownContainer,
+            element: innerDropdown,
+        },
+        {
+            target: bookHeader,
+            element: dropdownContainer,
+        },
+        {
+            target: bookHeader,
+            element: bookAlert,
         },
     );
-    
+
+
+    // Create book container
     const bookContainer = createElementAndApplyProperties('div', [
         {name: 'className', value: ''}
     ]);
@@ -246,14 +313,6 @@ export function generateBookCard(book, note='N/A') {
         },
     ]);
 
-    const bookViewmore = createElementAndApplyProperties('button', [
-        {name: 'textContent', value: 'View more'},
-    ]);
-    bookViewmore.addEventListener('click', function() {
-        console.log('view more');
-    }
-);
-
     toAppend.push(
         {
             target: bookInfoContent,
@@ -277,7 +336,7 @@ export function generateBookCard(book, note='N/A') {
         },
         {
             target: bookContainer,
-            element: navBar,
+            element: bookHeader,
         },
         {
             target: bookContainer,
@@ -287,13 +346,7 @@ export function generateBookCard(book, note='N/A') {
             target: bookContainer,
             element: bookInfoContent,
         },
-        {
-            target: bookContainer,
-            element: bookViewmore,
-        }
     );
-
-
 
     // Append all element to DOM
     toAppend.forEach((element) => {
