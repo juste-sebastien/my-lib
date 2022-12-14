@@ -1,0 +1,40 @@
+  ul-inner-dropdown {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  /****
+  ...other css before this
+  *****/
+  .dropdown {
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    margin: 30px;
+    background: rgb(248, 248, 248);
+    border: solid 1px rgb(222, 222, 222);
+    width: 10vw;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  .icon {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 25px 0 10px;
+  }
+  .menu {
+    height: 228px;
+  }
+  .menu li {
+    font-size: 12px;
+    text-transform: uppercase;
+    padding: 14px 10px;
+    border-top: solid 1px rgb(202, 202, 202);
+  }
+  
+  .dropdown.closed .menu {
+    height: 0px;
+  }
+  .dropdown.closed .icon span {
+    transform: rotate(180deg);
+  }
