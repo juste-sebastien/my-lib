@@ -13,6 +13,7 @@ from .models import *
 from .utils import *
 
 
+# todo ajouter du contenu au départ
 def index(request):
     """
     Render the index webpage with some books
@@ -27,49 +28,7 @@ def index(request):
     render():
         The rendering of the index webpage
     """
-    if request.method == 'GET':
-        # Check if GET request contain a search
-        if request.GET.__contains__("search"):
-            search = request.GET.get("search")
-            author = False
-            bookname = False
-            if request.GET.__contains__("author"):
-                if request.GET.get("author") == "on":
-                    author = True
-            if request.GET.__contains__("bookname"):
-                if request.GET.get("bookname") == "on":
-                    bookname = True
-
-            if request.user.is_authenticated:
-                user = User.objects.get(username=request.user)
-            # Get the booklist corresponding to the search
-            # and send it to fetch request in JS
-            try:
-                temp_booklist = get_searched_books(search, author, bookname)
-            except Book.DoesNotExist or Author.DoesNotExist:
-                return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
-            else:
-                booklist = []
-
-                for book in temp_booklist:
-                    book = book.serialize()
-                    if user: 
-                        book["is_readings"] = True if book in user.readings_list.all() else False
-                        book["is_read"] = True if book in user.read_list.all() else False
-                        book["is_to_read"] = True if book in user.to_read_list.all() else False
-                        book["is_stars"] = True if book in user.five_stars_list.all() else False
-                    booklist.append(book)
-                    
-                response = {
-                    "connected": True if user else False,
-                    "booklist": booklist,
-                }
-                return JsonResponse(response, status=200)
-
-    # In every case rendering index.html
-    return render(request, "my_lib/index.html", {
-        "books": Book.objects.all(),
-    })
+    return render(request, "my_lib/index.html")
 
 
 def login_view(request):
@@ -169,7 +128,7 @@ def register(request):
 
 
 def library(request):
-    return render(request, "my_lib/library.html")
+    return render (request, "my_lib/library.html")
 
 
 def profile(request, profile):
@@ -199,6 +158,7 @@ def add_to_list(request):
     JsonResponse:
         status code ok
     """
+    
     if request.method == "PUT":
         data = json.loads(request.body)
         list_to = str(data.get("list"))
@@ -224,7 +184,7 @@ def add_to_list(request):
                     user.read_list.add(book)
                     action = 'added'
                 list_name = "read"
-            case "to_read":
+            case "toread":
                 if book in user.to_read_list.all():
                     user.to_read_list.remove(book)
                     action = 'deleted'
@@ -242,9 +202,122 @@ def add_to_list(request):
                 list_name = "5 stars"
             case _:
                 return JsonResponse({"error": "You can't add it to this list."}, status=400)
+        
         user.save()
 
         response = {
             'comment': f"{book.title} was {action} to your {list_name}'s list"
         }
         return JsonResponse(response, status=200)
+
+
+def search(request):
+    if request.method == 'GET':
+        # Check if GET request contain a search
+        if request.GET.__contains__("search"):
+            search = request.GET.get("search")
+            author = False
+            bookname = False
+            if request.GET.__contains__("author"):
+                if request.GET.get("author") == "on":
+                    author = True
+            if request.GET.__contains__("bookname"):
+                if request.GET.get("bookname") == "on":
+                    bookname = True
+
+            if request.user.is_authenticated:
+                user = User.objects.get(username=request.user)
+            # Get the booklist corresponding to the search
+            # and send it to fetch request in JS
+            try:
+                temp_booklist = get_searched_books(search, author, bookname)
+            except Book.DoesNotExist or Author.DoesNotExist:
+                return JsonResponse({"error": "Your search does not exist in our DB."}, status=400)
+            else:
+                booklist = []
+
+                for book in temp_booklist:
+                    if user: 
+                        
+                        try:
+                            note = Note.objects.get(user=user.id, book=book.id)
+                        except Note.DoesNotExist:
+                            note = None
+                        is_in_readings = True if book in user.readings_list.all() else False
+                        is_in_read = True if book in user.read_list.all() else False
+                        is_in_toread = True if book in user.to_read_list.all() else False
+                        is_in_stars = True if book in user.five_stars_list.all() else False
+                        note = note.note if note != None else note
+                        first_name = book.author.first_name if book.author.first_name != None else ''
+                        last_name = book.author.last_name if book.author.last_name != None else ''
+                        author =  first_name + " " + last_name
+
+                    book = book.serialize()
+                    book["is_in_readings"] = is_in_readings
+                    book["is_in_read"] = is_in_read
+                    book["is_in_toread"] = is_in_toread
+                    book["is_in_stars"] = is_in_stars
+                    book["note"] = note
+                    book["author"] =  author
+                    print(book)
+                    booklist.append(book)
+                    
+                response = {
+                    "connected": True if user else False,
+                    "booklist": booklist,
+                }
+                return JsonResponse(response, status=200)
+
+@login_required
+def get_list(request):
+    booklist = []
+    if request.GET.__contains__("list"):
+        listname = request.GET.get("list")
+    else:
+        return JsonResponse({"error": "Your list does not exist in our DB."}, status=400)
+    
+    user = User.objects.get(username=request.user)
+    temp_booklist = []
+    match listname:
+        case 'readings':
+            temp_booklist = user.readings_list.all()
+        case 'read':
+            temp_booklist = user.read_list.all()
+        case 'toread':
+            temp_booklist = user.to_read_list.all()
+        case 'stars':
+            temp_booklist = user.five_stars_list.all()
+        case _:
+            return JsonResponse({"error": "Your list does not exist in our DB."}, status=400)
+
+    for book in temp_booklist:
+        if user: 
+            
+            try:
+                note = Note.objects.get(user=user.id, book=book.id)
+            except Note.DoesNotExist:
+                note = None
+            is_in_readings = True if book in user.readings_list.all() else False
+            is_in_read = True if book in user.read_list.all() else False
+            is_in_toread = True if book in user.to_read_list.all() else False
+            is_in_stars = True if book in user.five_stars_list.all() else False
+            note = note.note if note != None else note
+            first_name = book.author.first_name if book.author.first_name != None else ''
+            last_name = book.author.last_name if book.author.last_name != None else ''
+            author =  first_name + " " + last_name
+
+        book = book.serialize()
+        book["is_in_readings"] = is_in_readings
+        book["is_in_read"] = is_in_read
+        book["is_in_toread"] = is_in_toread
+        book["is_in_stars"] = is_in_stars
+        book["note"] = note
+        book["author"] =  author
+        print(book)
+        booklist.append(book)
+        
+    response = {
+        "connected": True if user else False,
+        "booklist": booklist,
+    }
+    return JsonResponse(response, status=200)

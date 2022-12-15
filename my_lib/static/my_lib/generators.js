@@ -1,5 +1,4 @@
 import { 
-    profileContainer, 
     zoomOnComment,
     addToBooklist,
     loadCustomList,

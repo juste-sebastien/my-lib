@@ -2,22 +2,27 @@
 {% load static %}
 
 {% block body %}
-    <div class="" id="home-main-container">
-        <div>
-            <label for="search">Search</label>
-            <input type="text" id="search" name="search" />
-            <button id="home-search-button">Search</button>
+    <div id="home-view">
+        <h3>Welcome</h3>
+        <div id="search-container">
+            <label for="search-input">Search</label>
+            <input type="text" id="search-input" name="search" />
+            <button id="search-button">Search</button>
             <label for="author-radio">Author</label>
-            <input type="radio" id="author-radio" name="author" />
+            <input type="radio" id="author-radio" name="type" value="author" required />
             <label for="bookname-radio">Bookname</label>
-            <input type="radio" id="bookname-radio" name="name" />
+            <input type="radio" id="bookname-radio" name="type" value="bookname" />
         </div>
-        <div id="home-container">
-            <div>Welcome to MyLib' </div>
+        <div class="results-container" id="search-results-container"></div>
+        <div id="whats-new-container">
+            <h4>What's new on My Lib'</h4>
+            <div id="new-sub-container"></div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block script %}
-    <script type="module" src="{% static 'my_lib/main.js' %}"></script>
+    <script src="{% static 'my_lib/main.js' %}" type="module"></script>
+    <script src="{% static 'my_lib/index.js' %}" type="module"></script>
 {% endblock %}

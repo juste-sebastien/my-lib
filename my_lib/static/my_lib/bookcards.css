@@ -1,0 +1,44 @@
+.bookcard {
+    display: flex;
+    margin: 1vw;
+    height: 30vh;
+    max-height: 150px;
+    width: 40vw;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.50);
+    border-radius: 25px;
+  }
+  
+  .bookcard-header {
+    width: 33%;
+    height: 100%;
+    border-right: 1px solid black;
+  }
+  
+  .bookcard-body {
+    width: 65%;
+    height: 100%;
+    border-radius: 0 25px 25px 0;
+    background-color: red;
+    z-index: 2;
+    flex-shrink: 1;
+  }
+  
+  .bookcard-panel-buttons {
+    width: 5%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    z-index: 1;
+  }
+  
+  .bookcard-panel-buttons:hover {
+    width: 20%;
+    transition: width 1s ease-in-out;
+  }
+  
+  .addlist-button {
+    height: 20%;
+    border-radius: 50px;
+    overflow: hidden;
+  }

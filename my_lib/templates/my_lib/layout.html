@@ -6,10 +6,11 @@
         <title>{% block title %}My Lib'{% endblock %}</title>
         <link href="{% static 'my_lib/styles.css' %}" rel="stylesheet">
         <link href="{% static 'my_lib/dropdown.css' %}" rel="stylesheet">
+        <link href="{% static 'my_lib/bookcards.css' %}" rel="stylesheet">
         {% block script %}
         {% endblock %}
     </head>
-    <header>
+    <div class="header">
         <h1><a class="" href="#">My Lib'</a></h1>
         
         <nav class="navbar">
@@ -42,7 +43,7 @@
             {% endif %}
             </ul>
         </nav>
-    </header>
+    </div>
     <body class="body">
         {% block body %}
         {% endblock %}

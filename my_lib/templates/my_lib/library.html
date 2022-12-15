@@ -5,28 +5,31 @@
     <div class="card" id="books-main-container">
         <div class="card-header" id="books-header">
             <h2 class="card-title">My books</h2>
-            <nav>
-                <ul>
-                    <li>
-                        <a>Readings<img src="" alt=" 📖"></a>
+            <nav class="navbar">
+                <ul class="inline-ul">
+                    <li class="li-as-link" id="link-readings">
+                        Readings
+                        <img src="" alt=" 📖">
                     </li>
-                    <li>
-                        <a>Read<img src="" alt=" ✔"></a>
+                    <li class="li-as-link" id="link-read">
+                       Read
+                       <img src="" alt=" ✔">
                     </li>
-                    <li>
-                        <a>To read<img src="" alt=" 📚"></a>
+                    <li class="li-as-link" id="link-toread">
+                        To read
+                        <img src="" alt=" 📚">
                     </li>
-                    <li>
-                        <a>5 stars<img src="" alt=" 🏆"></a>
+                    <li class="li-as-link" id="link-stars">
+                        5 stars
+                        <img src="" alt=" 🏆">
                     </li>
                 </ul>
             </nav>
         </div>
         <div class="card-container" id="books-body">
             <div class="arrow"><</div>
-                <div class="card-inner-container" id="books-container">
-                    <div class="zoomed-card"></div>
-                </div>
+                <div class="card-inner-container" id="books-container"></div>
+                <div class="zoomed-card" id="book-sheet"></div>
             <div class="arrow">></div>
         </div>
    </div>
@@ -34,4 +37,5 @@
 
 {% block script %}
     <script type="module" src="{% static 'my_lib/main.js' %}"></script>
+    <script type="module" src="{% static 'my_lib/library.js' %}"></script>
 {% endblock %}
