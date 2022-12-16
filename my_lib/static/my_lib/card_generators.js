@@ -4,6 +4,7 @@ import {
  } from "./main.js";
 import {
     createElementAndApplyProperties,
+    setRate,
 } from "./utils.js";
 
 
@@ -21,9 +22,7 @@ export function generateBookCard(book, sheet) {
     const cardContainer = createElementAndApplyProperties('div', [
         { name: 'className', value: 'bookcard'}
     ]);
-    cardContainer.addEventListener('click', () => {
-        getBookSheet(book, sheet);
-    })
+
 
     const image = createElementAndApplyProperties('img', [
         { name: 'src', value: `${book['cover']}`},
@@ -43,8 +42,8 @@ export function generateBookCard(book, sheet) {
 
     const note = createElementAndApplyProperties('div', [
         { 
-            name: 'textContent', 
-            value: book['note'] === null ? 'Not rated' : `${book['note']}`
+            name: 'innerHTML', 
+            value: book['note'] === null ? generateRating(book).innerHTML : `${book['note']}`
         }
     ]);
 
@@ -74,6 +73,14 @@ export function generateBookCard(book, sheet) {
             value: book['average_ratings'] === null ? '' : `${book['average_ratings']}`
         }
     ]);
+
+    const viewMore = createElementAndApplyProperties('button', [
+        { name: 'textContent', value: 'View More' }
+    ]);
+
+    viewMore.addEventListener('click', () => {
+        getBookSheet(book, sheet);
+    })
 
     const buttonPanel = createElementAndApplyProperties('div', [
         { name: 'className', value: 'bookcard-panel-buttons'},
@@ -173,6 +180,10 @@ export function generateBookCard(book, sheet) {
             element: average,
         },
         {
+            target: bottomInfo,
+            element: viewMore,
+        },
+        {
             target: topInfo,
             element: title,
         },
@@ -215,4 +226,204 @@ export function generateBookCard(book, sheet) {
     });
 
     return cardContainer;
+}
+
+
+function generateRating(book) {
+    const toAppend = [];
+    var rate = 0;
+
+    const container = createElementAndApplyProperties('div', [
+        { name: 'className', value: 'stars-container' }
+    ]);
+
+    const ul = createElementAndApplyProperties('ul', [
+        { name: 'className', value: 'star-ul' }
+    ]);
+
+    const li1 = createElementAndApplyProperties('li', [
+        { name: 'className', value: 'star-li' }
+    ]);
+
+    const span1 = createElementAndApplyProperties('span', [
+        { 
+            name: 'textContent',
+            value: Number(book['note']) >= 1 ? '★' : '☆'
+        },
+        { name: 'className', value: 'star-span' }
+    ]);
+
+    span1.addEventListener('click', () => {
+        /*if (span1.textContent === '☆') {
+            span1.textContent = '★';
+            rate = 1;
+        } else {
+            span5.textContent = '☆';
+            span4.textContent = '☆';
+            span3.textContent = '☆';
+            span2.textContent = '☆';
+            span1.textContent = '☆';
+            rate = 0;
+        };*/
+        console.log(span1);
+        setRate(rate, book);
+    });
+    
+    const li2 = createElementAndApplyProperties('li', [
+        { name: 'className', value: 'star-li' }
+    ]);
+
+    const span2 = createElementAndApplyProperties('span', [
+        { 
+            name: 'textContent',
+            value: Number(book['note']) >= 2 ? '★' : '☆'
+        },
+        { name: 'className', value: 'star-span' }
+    ]);
+    const li3 = createElementAndApplyProperties('li', [
+        { name: 'className', value: 'star-li' }
+    ]);
+
+    const span3 = createElementAndApplyProperties('span', [
+        { 
+            name: 'textContent',
+            value: Number(book['note']) >= 3 ? '★' : '☆'
+        },
+        { name: 'className', value: 'star-span' }
+    ]);
+    const li4 = createElementAndApplyProperties('li', [
+        { name: 'className', value: 'star-li' }
+    ]);
+
+    const span4 = createElementAndApplyProperties('span', [
+        { 
+            name: 'textContent',
+            value: Number(book['note']) >= 4 ? '★' : '☆'
+        },
+        { name: 'className', value: 'star-span' }
+    ]);
+    const li5 = createElementAndApplyProperties('li', [
+        { name: 'className', value: 'star-li' }
+    ]);
+
+    const span5 = createElementAndApplyProperties('span', [
+        { 
+            name: 'textContent',
+            value: Number(book['note']) >= 5 ? '★' : '☆'
+        },
+        { name: 'className', value: 'star-span' }
+    ]);
+
+    span2.addEventListener('click', () => {
+        if (span2.textContent === '☆') {
+            span1.textContent = '★';
+            span2.textContent = '★';
+            rate = 2;
+        } else {
+            span5.textContent = '☆';
+            span4.textContent = '☆';
+            span3.textContent = '☆';
+            span2.textContent = '☆';
+            rate = 1;
+        };
+        setRate(rate, book);
+    });
+
+    span3.addEventListener('click', () => {
+        if (span3.textContent === '☆') {
+            span1.textContent = '★';
+            span2.textContent = '★';
+            span3.textContent = '★';
+            rate = 3;
+        } else {
+            span5.textContent = '☆';
+            span4.textContent = '☆';
+            span3.textContent = '☆';
+            rate = 2;
+        };
+        setRate(rate, book);
+    });
+
+    span4.addEventListener('click', () => {
+        if (span2.textContent === '☆') {
+            span1.textContent = '★';
+            span2.textContent = '★';
+            span3.textContent = '★';
+            span4.textContent = '★';
+            rate = 4;
+        } else {
+            span5.textContent = '☆';
+            span4.textContent = '☆';
+            rate = 3;
+        };
+        setRate(rate, book);
+    });
+
+    span5.addEventListener('click', () => {
+        if (span5.textContent === '☆') {
+            span1.textContent = '★';
+            span2.textContent = '★';
+            span3.textContent = '★';
+            span4.textContent = '★';
+            span5.textContent = '★';
+            rate = 5;
+        } else {
+            span5.textContent = '☆';
+            rate = 4;
+        };
+        setRate(rate, book);
+    });
+
+    toAppend.push(
+        {
+            target: li1,
+            element: span1,
+        },
+        {
+            target: li2,
+            element: span2,
+        },
+        {
+            target: li3,
+            element: span3,
+        },
+        {
+            target: li4,
+            element: span4,
+        },
+        {
+            target: li5,
+            element: span5,
+        },
+        {
+            target: ul,
+            element: li1,
+        },
+        {
+            target: ul,
+            element: li2,
+        },
+        {
+            target: ul,
+            element: li3,
+        },
+        {
+            target: ul,
+            element: li4,
+        },
+        {
+            target: ul,
+            element: li5,
+        },
+        {
+            target: container,
+            element: ul,
+        },
+    );
+
+    toAppend.forEach((element) => {
+        element.target.appendChild(element.element);
+    });
+
+    return container;
 }

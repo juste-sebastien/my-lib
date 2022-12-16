@@ -1,0 +1,62 @@
+/*******************************************************/
+
+/* Star rating component */
+
+.star-ul {
+    list-style-type: none;
+    width: 100%;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .star-li {
+    display: inline;
+    margin: 0 5px;
+  }
+  
+  .stars-container {
+    border: 1px solid black;
+    width: 20%;
+    border-radius: 50px;
+  }
+  .stars {
+    width: 30px;
+  }
+  
+  .star-radio {
+    z-index: 1;
+    visibility: hidden;
+    cursor: pointer;
+  }
+  
+  .star-radio:hover {
+    cursor: pointer;
+  }
+  
+  .star-span {
+    font-size: 2em;
+    cursor: pointer;
+    color: yellow;
+  }
+
+  /*
+  span:hover {
+    animation-name: grow-up;
+    animation-duration: 0.5s;
+  }
+  
+  @keyframes grow-up {
+    0% {
+      font-size: 2em;
+    }
+    50% {
+      font-size: 2.5em;
+    }
+    100% {
+      font-size: 2em;
+    }
+  }
+*/

@@ -40,3 +40,8 @@ export function createElementAndApplyProperties(elementType, properties) {
     }
     return cookieValue;
   }
+
+
+  export function setRate(book) {
+    console.log(book);
+  }

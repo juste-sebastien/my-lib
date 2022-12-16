@@ -33,12 +33,17 @@ body {
   font-size: 5rem;
   cursor: pointer;
   transform: scale(0.6, 2.8);
+  z-index: 5;
+  max-width: 10%;
 }
 
 .card-inner-container {
   flex-grow: 1;
   padding: 20px;
   height: 91%;
+  /* version mobile
+  max-width: 75%;
+  */
 }
 
 .zoomed-card {
