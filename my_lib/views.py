@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -220,6 +221,8 @@ def search(request):
             search = request.GET.get("search")
             author = False
             bookname = False
+            page_number = request.GET.get("page")
+            per_page = request.GET.get("per-page")
             if request.GET.__contains__("author"):
                 if request.GET.get("author") == "on":
                     author = True
@@ -261,12 +264,21 @@ def search(request):
                     book["is_in_stars"] = is_in_stars
                     book["note"] = note
                     book["author"] =  author
-                    print(book)
                     booklist.append(book)
-                    
+
+                p = Paginator(booklist, per_page) 
+                final_list = [book for book in p.page(page_number)]
+                print(p.page(1))
+                print(p.num_pages)
+                print(p.page(1).has_previous())
+                print(p.page(1).has_next())
+
                 response = {
                     "connected": True if user else False,
-                    "booklist": booklist,
+                    "booklist": final_list,
+                    "total_pages": int(p.num_pages),
+                    "next_page": bool(p.page(page_number).has_next()),
+                    "previous_page": bool(p.page(page_number).has_previous()),
                 }
                 return JsonResponse(response, status=200)
 

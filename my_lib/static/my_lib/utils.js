@@ -1,4 +1,6 @@
-
+const smallSize = 640;
+const mediumSize = 1007;
+const largeSize = 1008;
 
 /**
  *  Create a new HTML element in the DOM
@@ -40,3 +42,30 @@ export function createElementAndApplyProperties(elementType, properties) {
     }
     return cookieValue;
   }
+
+
+export function displayAlert(element, elementClass, content) {
+  element.textContent = content;
+  element.classList.add('alert-display');
+  element.classList.add(elementClass);
+}
+
+
+export function hideAlert(element, elementClass, content) {
+  element.textContent = '';
+  element.classList.remove('alert-display');
+  element.classList.remove(elementClass);
+}
+
+
+export function setCardsPerPage() {
+  var width = window.innerWidth;
+
+  if (width <= smallSize) {
+    return 1;
+  } else if (width >= largeSize) {
+    return 4;
+  } else {
+    return 2;
+  }
+}
