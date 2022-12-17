@@ -332,6 +332,13 @@ def set_note(request, book_id):
     data = json.loads(request.body)
     rate = int(data["note"])
 
+    if rate == 5:
+        user.five_stars_list.add(book)
+        user.save()
+    else:
+        if book in user.five_stars_list.all():
+            user.five_stars_list.remove(book)
+
     try:
         note = Note.objects.get(user=user, book=book)
     except Note.DoesNotExist:

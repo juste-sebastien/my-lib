@@ -41,17 +41,7 @@ export function generateBookCard(book, sheet) {
         { name: 'textContent', value: `${book['title']}`}
     ]);
 
-
-    const note = createElementAndApplyProperties('div', [
-        { 
-            name: 'innerHTML', 
-            value: book['note'] === null ? '' : `${book['note']}`
-        }
-    ]);
-
-    if (book['note'] === null) {
-        var rate = 0;
-
+    var rate = 0;
     const container = createElementAndApplyProperties('div', [
         { name: 'className', value: 'stars-container' }
     ]);
@@ -192,12 +182,7 @@ export function generateBookCard(book, sheet) {
                 target: container,
                 element: span5,
             },
-            {
-                target: note,
-                element: container,
-            }
         );
-    }
 
     const author = createElementAndApplyProperties('div', [
         { name: 'textContent', value: `${book['author']}`}
@@ -341,7 +326,7 @@ export function generateBookCard(book, sheet) {
         },
         {
             target: topInfo,
-            element: note,
+            element: container,
         },
         {
             target: topInfo,

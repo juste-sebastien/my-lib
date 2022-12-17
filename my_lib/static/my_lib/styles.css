@@ -109,7 +109,7 @@ flex-grow: 0.6;
 max-width: 50vw;
 }
 
-.inline-ul li{
+.inline-ul{
   display: flex;
   justify-content: space-around;
   list-style: none;
