@@ -14,5 +14,6 @@ urlpatterns = [
     # API Routes
     path("search/", views.search, name="search"),
     path("add-to-list/", views.add_to_list, name="add_to_list"),
-    path("get-list/", views.get_list, name="get_list")
+    path("get-list/", views.get_list, name="get_list"),
+    path("set-rate/<int:book_id>", views.set_note, name="set_note")
 ]

@@ -72,7 +72,8 @@ class Book(models.Model):
     genre = models.ManyToManyField(Genre, related_name="book_genre")
     editor = models.ForeignKey(Editor, on_delete=models.CASCADE, related_name="book_editor")
     page_nbr = models.IntegerField(blank=True)
-    average_ratings = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
+    average_ratings = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True, default=0)
+    total_raters = models.IntegerField(blank=True)
     total_readers = models.IntegerField(blank=True, null=True)
     synopsis = models.TextField(max_length=1000, blank=True, null=True)
     cover = models.URLField(blank=True, null=True)
@@ -135,8 +136,8 @@ class Comment(models.Model):
 
     """
     title = models.CharField(max_length=64)
-    book = models.OneToOneField(Book, on_delete=models.CASCADE, related_name="commented")
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="commentor")
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name="commented")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentor")
     date = models.DateField(auto_now_add=True)
     content = models.TextField(max_length=1000)
 
@@ -154,8 +155,8 @@ class Note(models.Model):
 
     """
     note = models.DecimalField(max_digits=3, decimal_places=2)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'Note by {self.user.username} on {self.book.title}'

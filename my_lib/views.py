@@ -1,5 +1,7 @@
 import json
 
+from decimal import Decimal
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
@@ -320,4 +322,33 @@ def get_list(request):
         "connected": True if user else False,
         "booklist": booklist,
     }
+    return JsonResponse(response, status=200)
+
+
+@login_required
+def set_note(request, book_id):
+    user = User.objects.get(username=request.user)
+    book = Book.objects.get(id=int(book_id))
+    data = json.loads(request.body)
+    rate = int(data["note"])
+
+    try:
+        note = Note.objects.get(user=user, book=book)
+    except Note.DoesNotExist:
+        note = Note.objects.create(user=user, book=book, note=rate)
+    else:
+        note.note = rate
+    
+    note.save()
+    book.total_raters += 1
+    try:
+        book.average_ratings = (Decimal(book.average_ratings) + rate) / int(book.total_raters)
+    except TypeError:
+        book.average_ratings = rate / book.total_raters
+    book.save()
+
+    response = {
+        "comment": "Your rate was saved",
+    }
+
     return JsonResponse(response, status=200)

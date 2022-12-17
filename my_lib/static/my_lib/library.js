@@ -1,4 +1,5 @@
 import { generateBookCard } from "./card_generators.js";
+import { getCookie } from "./utils.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     const linkReadings = document.querySelector('#link-readings');
@@ -44,3 +45,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 });
+
+export function setRate(note, book) {
+    fetch(`set-rate/${book['id']}`, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+            note: note,
+        }),
+        headers: {
+            "X-CSRFToken": getCookie("csrftoken")
+        }
+      })
+      .then(response => response.json())
+      .then(user => console.log(user))
+      .catch(error => {
+        console.log('Error: ', error);
+      });
+  }

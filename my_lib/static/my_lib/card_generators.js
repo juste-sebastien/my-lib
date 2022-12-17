@@ -4,9 +4,10 @@ import {
  } from "./main.js";
 import {
     createElementAndApplyProperties,
-    setRate,
 } from "./utils.js";
-
+import {
+    setRate,
+} from "./library.js";
 
 /**
  * Generate a book card
@@ -40,12 +41,163 @@ export function generateBookCard(book, sheet) {
         { name: 'textContent', value: `${book['title']}`}
     ]);
 
+
     const note = createElementAndApplyProperties('div', [
         { 
             name: 'innerHTML', 
-            value: book['note'] === null ? generateRating(book).innerHTML : `${book['note']}`
+            value: book['note'] === null ? '' : `${book['note']}`
         }
     ]);
+
+    if (book['note'] === null) {
+        var rate = 0;
+
+    const container = createElementAndApplyProperties('div', [
+        { name: 'className', value: 'stars-container' }
+    ]);
+
+    const span1 = createElementAndApplyProperties('span', [
+        { 
+            name: 'textContent',
+            value: Number(book['note']) >= 1 ? '★' : '☆'
+        },
+        { name: 'className', value: 'star-span' }
+    ]);
+
+    span1.addEventListener('click', () => {
+        if (span1.textContent === '☆') {
+            span1.textContent = '★';
+            rate = 1;
+        } else {
+            span5.textContent = '☆';
+            span4.textContent = '☆';
+            span3.textContent = '☆';
+            span2.textContent = '☆';
+            span1.textContent = '☆';
+            rate = 0;
+        };
+        setRate(rate, book);
+        });
+        
+        const span2 = createElementAndApplyProperties('span', [
+            { 
+                name: 'textContent',
+                value: Number(book['note']) >= 2 ? '★' : '☆'
+            },
+            { name: 'className', value: 'star-span' }
+        ]);
+
+        const span3 = createElementAndApplyProperties('span', [
+            { 
+                name: 'textContent',
+                value: Number(book['note']) >= 3 ? '★' : '☆'
+            },
+            { name: 'className', value: 'star-span' }
+        ]);
+
+        const span4 = createElementAndApplyProperties('span', [
+            { 
+                name: 'textContent',
+                value: Number(book['note']) >= 4 ? '★' : '☆'
+            },
+            { name: 'className', value: 'star-span' }
+        ]);
+
+        const span5 = createElementAndApplyProperties('span', [
+            { 
+                name: 'textContent',
+                value: Number(book['note']) >= 5 ? '★' : '☆'
+            },
+            { name: 'className', value: 'star-span' }
+        ]);
+
+        span2.addEventListener('click', () => {
+            if (span2.textContent === '☆') {
+                span1.textContent = '★';
+                span2.textContent = '★';
+                rate = 2;
+            } else {
+                span5.textContent = '☆';
+                span4.textContent = '☆';
+                span3.textContent = '☆';
+                span2.textContent = '☆';
+                rate = 1;
+            };
+            setRate(rate, book);
+        });
+
+        span3.addEventListener('click', () => {
+            if (span3.textContent === '☆') {
+                span1.textContent = '★';
+                span2.textContent = '★';
+                span3.textContent = '★';
+                rate = 3;
+            } else {
+                span5.textContent = '☆';
+                span4.textContent = '☆';
+                span3.textContent = '☆';
+                rate = 2;
+            };
+            setRate(rate, book);
+        });
+
+        span4.addEventListener('click', () => {
+            if (span4.textContent === '☆') {
+                span1.textContent = '★';
+                span2.textContent = '★';
+                span3.textContent = '★';
+                span4.textContent = '★';
+                rate = 4;
+            } else {
+                span5.textContent = '☆';
+                span4.textContent = '☆';
+                rate = 3;
+            };
+            setRate(rate, book);
+        });
+
+        span5.addEventListener('click', () => {
+            if (span5.textContent === '☆') {
+                span1.textContent = '★';
+                span2.textContent = '★';
+                span3.textContent = '★';
+                span4.textContent = '★';
+                span5.textContent = '★';
+                rate = 5;
+            } else {
+                span5.textContent = '☆';
+                rate = 4;
+            };
+            setRate(rate, book);
+        });
+
+        toAppend.push(
+            {
+                target: container,
+                element: span1,
+            },
+            {
+                target: container,
+                element: span2,
+            },
+            {
+                target: container,
+                element: span3,
+            },
+            {
+                target: container,
+                element: span4,
+            },
+            {
+                target: container,
+                element: span5,
+            },
+            {
+                target: note,
+                element: container,
+            }
+        );
+    }
 
     const author = createElementAndApplyProperties('div', [
         { name: 'textContent', value: `${book['author']}`}
@@ -231,196 +383,6 @@ export function generateBookCard(book, sheet) {
 
 function generateRating(book) {
     const toAppend = [];
-    var rate = 0;
-
-    const container = createElementAndApplyProperties('div', [
-        { name: 'className', value: 'stars-container' }
-    ]);
-
-    const ul = createElementAndApplyProperties('ul', [
-        { name: 'className', value: 'star-ul' }
-    ]);
-
-    const li1 = createElementAndApplyProperties('li', [
-        { name: 'className', value: 'star-li' }
-    ]);
-
-    const span1 = createElementAndApplyProperties('span', [
-        { 
-            name: 'textContent',
-            value: Number(book['note']) >= 1 ? '★' : '☆'
-        },
-        { name: 'className', value: 'star-span' }
-    ]);
-
-    span1.addEventListener('click', () => {
-        /*if (span1.textContent === '☆') {
-            span1.textContent = '★';
-            rate = 1;
-        } else {
-            span5.textContent = '☆';
-            span4.textContent = '☆';
-            span3.textContent = '☆';
-            span2.textContent = '☆';
-            span1.textContent = '☆';
-            rate = 0;
-        };*/
-        console.log(span1);
-        setRate(rate, book);
-    });
-    
-    const li2 = createElementAndApplyProperties('li', [
-        { name: 'className', value: 'star-li' }
-    ]);
-
-    const span2 = createElementAndApplyProperties('span', [
-        { 
-            name: 'textContent',
-            value: Number(book['note']) >= 2 ? '★' : '☆'
-        },
-        { name: 'className', value: 'star-span' }
-    ]);
-    const li3 = createElementAndApplyProperties('li', [
-        { name: 'className', value: 'star-li' }
-    ]);
-
-    const span3 = createElementAndApplyProperties('span', [
-        { 
-            name: 'textContent',
-            value: Number(book['note']) >= 3 ? '★' : '☆'
-        },
-        { name: 'className', value: 'star-span' }
-    ]);
-    const li4 = createElementAndApplyProperties('li', [
-        { name: 'className', value: 'star-li' }
-    ]);
-
-    const span4 = createElementAndApplyProperties('span', [
-        { 
-            name: 'textContent',
-            value: Number(book['note']) >= 4 ? '★' : '☆'
-        },
-        { name: 'className', value: 'star-span' }
-    ]);
-    const li5 = createElementAndApplyProperties('li', [
-        { name: 'className', value: 'star-li' }
-    ]);
-
-    const span5 = createElementAndApplyProperties('span', [
-        { 
-            name: 'textContent',
-            value: Number(book['note']) >= 5 ? '★' : '☆'
-        },
-        { name: 'className', value: 'star-span' }
-    ]);
-
-    span2.addEventListener('click', () => {
-        if (span2.textContent === '☆') {
-            span1.textContent = '★';
-            span2.textContent = '★';
-            rate = 2;
-        } else {
-            span5.textContent = '☆';
-            span4.textContent = '☆';
-            span3.textContent = '☆';
-            span2.textContent = '☆';
-            rate = 1;
-        };
-        setRate(rate, book);
-    });
-
-    span3.addEventListener('click', () => {
-        if (span3.textContent === '☆') {
-            span1.textContent = '★';
-            span2.textContent = '★';
-            span3.textContent = '★';
-            rate = 3;
-        } else {
-            span5.textContent = '☆';
-            span4.textContent = '☆';
-            span3.textContent = '☆';
-            rate = 2;
-        };
-        setRate(rate, book);
-    });
-
-    span4.addEventListener('click', () => {
-        if (span2.textContent === '☆') {
-            span1.textContent = '★';
-            span2.textContent = '★';
-            span3.textContent = '★';
-            span4.textContent = '★';
-            rate = 4;
-        } else {
-            span5.textContent = '☆';
-            span4.textContent = '☆';
-            rate = 3;
-        };
-        setRate(rate, book);
-    });
-
-    span5.addEventListener('click', () => {
-        if (span5.textContent === '☆') {
-            span1.textContent = '★';
-            span2.textContent = '★';
-            span3.textContent = '★';
-            span4.textContent = '★';
-            span5.textContent = '★';
-            rate = 5;
-        } else {
-            span5.textContent = '☆';
-            rate = 4;
-        };
-        setRate(rate, book);
-    });
-
-    toAppend.push(
-        {
-            target: li1,
-            element: span1,
-        },
-        {
-            target: li2,
-            element: span2,
-        },
-        {
-            target: li3,
-            element: span3,
-        },
-        {
-            target: li4,
-            element: span4,
-        },
-        {
-            target: li5,
-            element: span5,
-        },
-        {
-            target: ul,
-            element: li1,
-        },
-        {
-            target: ul,
-            element: li2,
-        },
-        {
-            target: ul,
-            element: li3,
-        },
-        {
-            target: ul,
-            element: li4,
-        },
-        {
-            target: ul,
-            element: li5,
-        },
-        {
-            target: container,
-            element: ul,
-        },
-    );
-
     toAppend.forEach((element) => {
         element.target.appendChild(element.element);
     });

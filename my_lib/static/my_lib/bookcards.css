@@ -45,6 +45,9 @@
     overflow: hidden;
   }
 
+/******************************************************/
+/* Zoomed bookview */
+
 .bookview-container {
   display: flex;
   height: fit-content;
@@ -92,4 +95,23 @@
   height: 40%;
   overflow: scroll;
   padding: 20px;
+}
+
+
+/*******************************************************/
+
+/* Star rating component */
+  
+.stars-container {
+  width: 20%;
+  border-radius: 50px;
+}
+.stars {
+  width: 30px;
+}
+
+.star-span {
+  font-size: 2em;
+  cursor: pointer;
+  color: yellow;
 }
