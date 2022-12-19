@@ -69,3 +69,45 @@ export function setCardsPerPage() {
     return 2;
   }
 }
+
+export function changeArrowDisplay(element, status){
+  console.log(status)
+  if (status) {
+    console.log('test pass');
+    element.classList.add("enabled-arrow");
+  } else {
+      element.classList.remove("enabled-arrow");
+      element.setAttribute('disabled', '');
+  }
+  /*
+if (response['next_page']) {
+    rightArrow.classList.add("enabled-arrow");
+    rightArrow.addEventListener('click', () => {
+        url = url.replace(`page=${pageNum-1}`, `page=${pageNum}`);
+        response = function() {
+         fetch(url)
+         .then(response => response.json());
+        };
+     });
+} else {
+    rightArrow.classList.remove("enabled-arrow");
+    rightArrow.setAttribute('disabled', '');
+}
+
+document.querySelector('#books-container').innerHTML = '';
+response['booklist'].forEach(book => {
+document.querySelector('#books-container').appendChild(
+    generateBookCard(
+        book,
+        bookSheet,
+        response.connected
+    ));
+});
+
+url = url.replace(`page=${pageNum+1}`, `page=${pageNum}`);
+        response = function() {
+            fetch(url)
+            .then(response => response.json());
+        };
+        */
+}

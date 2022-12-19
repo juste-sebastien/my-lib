@@ -1,5 +1,12 @@
 import { generateBookCard } from "./card_generators.js";
-import { getCookie } from "./utils.js";
+import { 
+    getCookie,
+    setCardsPerPage,
+    changeArrowDisplay
+} from "./utils.js";
+
+var pageNum = 1;
+var cardsPerPage = setCardsPerPage();
 
 document.addEventListener('DOMContentLoaded', function() {
     const linkReadings = document.querySelector('#link-readings');
@@ -26,10 +33,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function loadList(name) {
         var url = `/get-list/?list=${name}`;
+        url = url.concat(`&page=${pageNum}`);
+        url = url.concat(`&per-page=${cardsPerPage}`);
 
         fetch(url)
         .then(response => response.json())
         .then(response => {
+            const leftArrow = document.querySelector('#library-left-arrow');
+            const rightArrow =document.querySelector('#library-right-arrow');
+            changeArrowDisplay(leftArrow, response['previous_page']);
+            changeArrowDisplay(rightArrow, response['next_page']);
+            leftArrow.addEventListener('click', () => {
+                if (pageNum > 1) {
+                    pageNum--;
+                }
+                loadList(name, pageNum);   
+            });
+            rightArrow.addEventListener('click', () => {
+                if (pageNum < response['total_pages']) {
+                pageNum++;
+                }
+                loadList(name, pageNum)
+            });
+
             document.querySelector('#books-container').innerHTML = '';
             response.booklist.forEach(book => {
             document.querySelector('#books-container').appendChild(

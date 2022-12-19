@@ -18,9 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBooknameRadio = document.querySelector('bookname-radio');
     const searchButton = document.querySelector('#search-button');
     const alert = document.querySelector('#alert-comment');
+    const bookSheet = document.querySelector('#book-sheet');
 
     searchButton.addEventListener('click', () => {
-        getResearch();
+        getResearch(searchInput.value);
     });
 
     /**
@@ -28,12 +29,13 @@ document.addEventListener('DOMContentLoaded', function() {
      * and display then in a card
      * 
      */
-    function getResearch(){
-        var url = `/search/?search=${searchInput.value}`;
-        if (document.querySelector('#author-radio').checked) {
+    function getResearch(research){
+
+        var url = `/search/?search=${research}`;
+        if (searchAuthorRadio.checked) {
             url = url.concat('&author=on');
         };
-        if (document.querySelector('#bookname-radio').checked) {
+        if (searchBooknameRadio.checked) {
             url = url.concat('&bookname=on');
         };
 
@@ -46,44 +48,27 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(response);
             const leftArrow = document.querySelector('#search-left-arrow');
             const rightArrow =document.querySelector('#search-right-arrow');
-            if (response['previous_page']) {
-                leftArrow.classList.add("enabled-arrow");
-                leftArrow.addEventListener('click', () => {
-                    if (pageNum > 1) {
-                        pageNum--;
-                    }
-                    url = url.replace(`page=${pageNum+1}`, `page=${pageNum}`);
-                    response = function() {
-                        fetch(url)
-                        .then(response => response.json());
-                    };
-                });
-            } else {
-                leftArrow.classList.remove("enabled-arrow");
-                leftArrow.setAttribute('disabled', '');
-            }
-            if (response['next_page']) {
-                rightArrow.classList.add("enabled-arrow");
-                rightArrow.addEventListener('click', () => {
-                    if (pageNum < book["total_pages"]) {
-                        pageNum++;
-                    }
-                    url = url.replace(`page=${pageNum-1}`, `page=${pageNum}`);
-                    response = function() {
-                     fetch(url)
-                     .then(response => response.json());
-                    };
-                 });
-            } else {
-                rightArrow.classList.remove("enabled-arrow");
-                rightArrow.setAttribute('disabled', '');
-            }
+            changeArrowDisplay(leftArrow, response['previous_page']);
+            changeArrowDisplay(rightArrow, response['next_page']);
+            leftArrow.addEventListener('click', () => {
+                if (pageNum > 1) {
+                    pageNum--;
+                }
+                getResearch(research); 
+            });
+            rightArrow.addEventListener('click', () => {
+                if (pageNum < response['total_pages']) {
+                pageNum++;
+                }
+                getResearch(research);
+            });
 
-            document.querySelector('#search-results-container').innerHTML = '';
-            response['booklist'].forEach(book => {
-            document.querySelector('#search-results-container').appendChild(
+            document.querySelector('#books-container').innerHTML = '';
+            response.booklist.forEach(book => {
+            document.querySelector('#books-container').appendChild(
                 generateBookCard(
                     book,
+                    bookSheet,
                     response.connected
                 ));
             });
@@ -97,9 +82,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Error: ', error);
             let content = 'This book currently does not exist in our database';
             displayAlert(alert, 'alert-danger', content);
-            document.querySelector('#author-radio').checked = false;
-            document.querySelector('#bookname-radio').checked = false;
-            document.querySelector('#search-input').value = '';
+            searchAuthorRadio.checked = false;
+            searchBooknameRadio.checked = false;
+            searchInput.value = '';
             setTimeout(function() {
                 hideAlert(alert, 'alert-danger', content);
             }, 4000);
