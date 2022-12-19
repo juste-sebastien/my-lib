@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
+from itertools import chain
+
 from .models import *
 from .utils import *
 
@@ -266,19 +268,25 @@ def search(request):
                     book["author"] =  author
                     booklist.append(book)
 
-                p = Paginator(booklist, per_page) 
-                final_list = [book for book in p.page(page_number)]
-                print(p.page(1))
-                print(p.num_pages)
-                print(p.page(1).has_previous())
-                print(p.page(1).has_next())
+                try:
+                    p = Paginator(booklist, per_page) 
+                except EmptyPage:
+                    num_pages = 0
+                    previous = False
+                    next = False
+                    final_list = []
+                else:
+                    num_pages = int(p.num_pages)
+                    previous = bool(p.page(page_number).has_previous())
+                    next = bool(p.page(page_number).has_next())
+                    final_list = [book for book in p.page(page_number)]
 
                 response = {
                     "connected": True if user else False,
                     "booklist": final_list,
-                    "total_pages": int(p.num_pages),
-                    "next_page": bool(p.page(page_number).has_next()),
-                    "previous_page": bool(p.page(page_number).has_previous()),
+                    "total_pages": num_pages,
+                    "next_page": next,
+                    "previous_page": previous,
                 }
                 return JsonResponse(response, status=200)
 
@@ -365,11 +373,20 @@ def set_note(request, book_id):
 
     if rate == 5:
         user.five_stars_list.add(book)
-        user.save()
     else:
         if book in user.five_stars_list.all():
             user.five_stars_list.remove(book)
-
+    user.average_readings_page = int(
+        (user.average_readings_page + book.page_nbr) / 2
+    )
+    if book.publication != None:
+        user.average_publication = int(
+            (user.average_publication + book.publication) / 2
+        )
+    for genre in book.genre.all():
+        if genre not in user.read_genres.all():
+            user.read_genres.add(genre)
+    user.save()
     try:
         note = Note.objects.get(user=user, book=book)
     except Note.DoesNotExist:
@@ -389,4 +406,79 @@ def set_note(request, book_id):
         "comment": "Your rate was saved",
     }
 
+    return JsonResponse(response, status=200)
+
+
+@login_required
+def get_recommendation(request):
+    user = User.objects.get(username=request.user)
+    temp_booklist = list(chain(user.five_stars_list.all(), user.read_list.all()))
+    if len(temp_booklist) < 5:
+        response = {
+            "not_enough": "Not enough book in your list. Please add at least 5 books"
+        }
+        return JsonResponse(response, status=204)
+    page_number = request.GET.get("page")
+    per_page =  request.GET.get("per-page")
+    recommendated_list = []
+    genre_list = []
+    
+    for book in temp_booklist:
+        for genre in book.genre.all():
+            if genre.id not in genre_list:
+                genre_list.append(genre.id)
+
+    print(genre_list)
+
+    for genre in genre_list:
+        current_list = Book.objects.filter(genre=genre)
+    
+        print(current_list, type(current_list))
+        for book in current_list.all():
+            current_book_note = get_book_recommendation_note(book, user) + 50
+            current_book_note = current_book_note / 140 * 100
+            if current_book_note >= 80 and book not in temp_booklist:
+                try:
+                    note = Note.objects.get(user=user.id, book=book.id)
+                except Note.DoesNotExist:
+                    note = None
+                is_in_readings = True if book in user.readings_list.all() else False
+                is_in_read = True if book in user.read_list.all() else False
+                is_in_toread = True if book in user.to_read_list.all() else False
+                is_in_stars = True if book in user.five_stars_list.all() else False
+                note = note.note if note != None else note
+                first_name = book.author.first_name if book.author.first_name != None else ''
+                last_name = book.author.last_name if book.author.last_name != None else ''
+                author =  first_name + " " + last_name
+
+                book = book.serialize()
+                book["is_in_readings"] = is_in_readings
+                book["is_in_read"] = is_in_read
+                book["is_in_toread"] = is_in_toread
+                book["is_in_stars"] = is_in_stars
+                book["note"] = note
+                book["author"] =  author
+            
+                recommendated_list.append(book)
+        
+    try:
+        p = Paginator(recommendated_list, per_page) 
+    except EmptyPage:
+        num_pages = 0
+        previous = False
+        next = False
+        final_list = []
+    else:
+        num_pages = int(p.num_pages)
+        previous = bool(p.page(page_number).has_previous())
+        next = bool(p.page(page_number).has_next())
+        final_list = [book for book in p.page(page_number)]
+
+    response = {
+        "connected": True if user else False,
+        "booklist": final_list,
+        "total_pages": num_pages,
+        "next_page": next,
+        "previous_page": previous,
+    }
     return JsonResponse(response, status=200)

@@ -8,6 +8,7 @@ import {
 
 var pageNum = 1;
 var cardsPerPage = setCardsPerPage();
+console.log(cardsPerPage, typeof(cardsPerPage));
 
 document.addEventListener('DOMContentLoaded', function() {
     const linkReadings = document.querySelector('#link-readings');

@@ -121,6 +121,9 @@ class User(AbstractUser):
     readings_list = models.ManyToManyField(Book, related_name="user_readings_list")
     to_read_list = models.ManyToManyField(Book, related_name="user_to_read_list")
     five_stars_list = models.ManyToManyField(Book, related_name="user_five_list")
+    average_readings_page = models.IntegerField(blank=True)
+    average_publication = models.IntegerField(blank=True)
+    read_genres = models.ManyToManyField(Genre, related_name="fav_genres")
 
     def __str__(self):
         return f'{self.username}'

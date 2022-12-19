@@ -7,10 +7,16 @@
             <h2 class="card-title">Reccommendator</h2>
             <button class="button" id="recommendator-button">Refresh</button>
         </div>
-        <div id="recommendator-container"></div>
+        <div class="card-container" id="recommendator-container">
+            <div class="arrow" id="reco-left-arrow"><</div>
+                <div class="card-inner-container" id="reco-books-container"></div>
+                <div class="zoomed-card" id="book-sheet"></div>
+            <div class="arrow" id="reco-right-arrow">></div>
+        </div>
     </div>
 {% endblock %}
 
 {% block script %}
     <script type="module" src="{% static 'my_lib/main.js' %}"></script>
+    <script type="module" src="{% static 'my_lib/recommendator.js' %}"></script>
 {% endblock %}
