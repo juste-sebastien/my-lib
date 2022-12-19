@@ -2,7 +2,8 @@ import { generateBookCard } from "./card_generators.js";
 import { 
     getCookie,
     setCardsPerPage,
-    changeArrowDisplay
+    changeArrowDisplay,
+    displayAlert
 } from "./utils.js";
 
 var pageNum = 1;
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const bookSheet = document.querySelector('#book-sheet');
+    const alert = document.querySelector('#alert-comment');
 
     function loadList(name) {
         var url = `/get-list/?list=${name}`;
@@ -62,30 +64,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 generateBookCard(
                     book,
                     bookSheet,
+                    alert,
                     response.connected
                 ));
             });
         })
         .catch(error => {
         console.log('Error: ', error);
+            let content = 'An error occurs, please try to reload page';
+            displayAlert(alert, 'alert-danger', content);
+            setTimeout(
+                hideAlert,
+                4000,
+                alert, 
+                'alert-danger'
+            );
         });
     };
 });
-
-export function setRate(note, book) {
-    fetch(`set-rate/${book['id']}`, {
-        method: 'PUT',
-        credentials: 'same-origin',
-        body: JSON.stringify({
-            note: note,
-        }),
-        headers: {
-            "X-CSRFToken": getCookie("csrftoken")
-        }
-      })
-      .then(response => response.json())
-      .then(user => console.log(user))
-      .catch(error => {
-        console.log('Error: ', error);
-      });
-  }

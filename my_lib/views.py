@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -294,7 +294,7 @@ def get_list(request):
     temp_booklist = []
     page_number = request.GET.get("page")
     per_page = request.GET.get("per-page")
-    
+
     match listname:
         case 'readings':
             temp_booklist = user.readings_list.all()
@@ -333,19 +333,25 @@ def get_list(request):
         print(book)
         booklist.append(book)
         
-    p = Paginator(booklist, per_page) 
-    final_list = [book for book in p.page(page_number)]
-    print(p.page(1))
-    print(p.num_pages)
-    print(p.page(1).has_previous())
-    print(p.page(1).has_next())
+    try:
+        p = Paginator(booklist, per_page) 
+    except EmptyPage:
+        num_pages = 0
+        previous = False
+        next = False
+        final_list = []
+    else:
+        num_pages = int(p.num_pages)
+        previous = bool(p.page(page_number).has_previous())
+        next = bool(p.page(page_number).has_next())
+        final_list = [book for book in p.page(page_number)]
 
     response = {
         "connected": True if user else False,
         "booklist": final_list,
-        "total_pages": int(p.num_pages),
-        "next_page": bool(p.page(page_number).has_next()),
-        "previous_page": bool(p.page(page_number).has_previous()),
+        "total_pages": num_pages,
+        "next_page": next,
+        "previous_page": previous,
     }
     return JsonResponse(response, status=200)
 

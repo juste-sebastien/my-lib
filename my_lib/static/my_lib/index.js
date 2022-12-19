@@ -3,6 +3,7 @@ import {
 } from "./card_generators.js";
 
 import {
+    changeArrowDisplay,
     displayAlert,
     hideAlert,
     setCardsPerPage,
@@ -32,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function getResearch(research){
 
         var url = `/search/?search=${research}`;
-        if (searchAuthorRadio.checked) {
+        if (document.querySelector('#author-radio').checked) {
             url = url.concat('&author=on');
         };
-        if (searchBooknameRadio.checked) {
+        if (document.querySelector('#bookname-radio').checked) {
             url = url.concat('&bookname=on');
         };
 
@@ -63,12 +64,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 getResearch(research);
             });
 
-            document.querySelector('#books-container').innerHTML = '';
+            document.querySelector('#search-results-container').innerHTML = '';
             response.booklist.forEach(book => {
-            document.querySelector('#books-container').appendChild(
+            document.querySelector('#search-results-container').appendChild(
                 generateBookCard(
                     book,
                     bookSheet,
+                    alert,
                     response.connected
                 ));
             });
@@ -82,12 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Error: ', error);
             let content = 'This book currently does not exist in our database';
             displayAlert(alert, 'alert-danger', content);
-            searchAuthorRadio.checked = false;
-            searchBooknameRadio.checked = false;
-            searchInput.value = '';
-            setTimeout(function() {
-                hideAlert(alert, 'alert-danger', content);
-            }, 4000);
+            document.querySelector('#author-radio').checked = false;
+            document.querySelector('#bookname-radio').checked = false;
+            document.querySelector('#search-input').value = '';
         });
     }
 })

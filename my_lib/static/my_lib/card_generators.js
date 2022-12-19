@@ -4,22 +4,24 @@ import {
  } from "./main.js";
 import {
     createElementAndApplyProperties,
-} from "./utils.js";
-import {
+    displayAlert,
+    hideAlert,
     setRate,
-} from "./library.js";
+} from "./utils.js";
+
 
 /**
  * Generate a book card
  * 
  * @param {object} book - informations concerning a book
  * @param {HTMLElement} sheet - container for displaying book information
+ * @param {HTMLElement} alertElement - container for displaying alert
  * 
  * @return {HTMLElement} cardContainer
  */
-export function generateBookCard(book, sheet) {
+export function generateBookCard(book, sheet, alertElement) {
     const toAppend = [];
-
+    console.log(alertElement);
     const cardContainer = createElementAndApplyProperties('div', [
         { name: 'className', value: 'bookcard'}
     ]);
@@ -67,6 +69,8 @@ export function generateBookCard(book, sheet) {
             rate = 0;
         };
         setRate(rate, book);
+        let content = 'Thank\'s for rating this book';
+        displayAlert(alertElement, 'alert-primary', content);
         });
         
         const span2 = createElementAndApplyProperties('span', [
@@ -114,6 +118,8 @@ export function generateBookCard(book, sheet) {
                 rate = 1;
             };
             setRate(rate, book);
+            let content = 'Thank\'s for rating this book';
+            displayAlert(alertElement, 'alert-primary', content);
         });
 
         span3.addEventListener('click', () => {
@@ -129,6 +135,8 @@ export function generateBookCard(book, sheet) {
                 rate = 2;
             };
             setRate(rate, book);
+            let content = 'Thank\'s for rating this book';
+            displayAlert(alertElement, 'alert-primary', content);
         });
 
         span4.addEventListener('click', () => {
@@ -144,6 +152,8 @@ export function generateBookCard(book, sheet) {
                 rate = 3;
             };
             setRate(rate, book);
+            let content = 'Thank\'s for rating this book';
+            displayAlert(alertElement, 'alert-primary', content);
         });
 
         span5.addEventListener('click', () => {
@@ -159,6 +169,8 @@ export function generateBookCard(book, sheet) {
                 rate = 4;
             };
             setRate(rate, book);
+            let content = 'Thank\'s for rating this book';
+            displayAlert(alertElement, 'alert-primary', content);
         });
 
         toAppend.push(
@@ -231,13 +243,18 @@ export function generateBookCard(book, sheet) {
         { name: 'className', value: 'addlist-button'},
     ]);
     readingsButton.addEventListener('click', () => {
+        let doing = '';
         if (book['is_in_readings']) {
+            doing = 'removed from';
             readingsButton.textContent = '📖 Remove'
         } else {
+            doing = 'added to'
             readingsButton.textContent = '📖 Add'
         }
         book['is_in_readings'] = !book['is_in_readings'];
         addToBooklist('readings', book);
+        let content = `${book['title']}, was ${doing} your readings list`;
+        displayAlert(alertElement, 'alert-primary', content);
     })
 
     const readButton = createElementAndApplyProperties('button', [
@@ -248,13 +265,18 @@ export function generateBookCard(book, sheet) {
         { name: 'className', value: 'addlist-button'},
     ]);
     readButton.addEventListener('click', () => {
+        let doing = '';
         if (book['is_in_read']) {
+            doing = 'removed from';
             readButton.textContent = '✔ Remove'
         } else {
+            doing = 'added to';
             readButton.textContent = '✔ Add'
         }
         book['is_in_read'] = !book['is_in_read'];
         addToBooklist('read', book);
+        let content = `${book['title']}, was ${doing} your reads list`;
+        displayAlert(alertElement, 'alert-primary', content);
     });
 
     const toreadButton = createElementAndApplyProperties('button', [
@@ -265,13 +287,18 @@ export function generateBookCard(book, sheet) {
         { name: 'className', value: 'addlist-button'},
     ]);
     toreadButton.addEventListener('click', () => {
+        let doing = ''
         if (book['is_in_toread']) {
+            doing = 'removed from'
             toreadButton.textContent = '📚 Remove'
         } else {
+            doing = 'added to'
             toreadButton.textContent = '📚 Add'
         }
         book['is_in_toread'] = !book['is_in_toread'];
         addToBooklist('toread', book);
+        let content = `${book['title']}, was ${doing} your to read list`;
+        displayAlert(alertElement, 'alert-primary', content);
     });
 
     const starsButton = createElementAndApplyProperties('button', [
@@ -282,13 +309,18 @@ export function generateBookCard(book, sheet) {
         { name: 'className', value: 'addlist-button'},
     ]);
     starsButton.addEventListener('click', () => {
+        let doing = '';
         if (book['is_in_stars']) {
+            doing = 'removed from'
             starsButton.textContent = '🏆 Remove'
         } else {
+            doing = 'added to'
             starsButton.textContent = '🏆 Add'
         }
         book['is_in_stars'] = !book['is_in_stars'];
         addToBooklist('stars', book);
+        let content = `${book['title']}, was ${doing} your 5-stars list`;
+        displayAlert(alertElement, 'alert-primary', content);
     });
 
     toAppend.push(

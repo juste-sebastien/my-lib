@@ -137,7 +137,6 @@ max-width: 50vw;
 
 .alert {
   position: absolute;
-  visibility: hidden;
   margin: 5px;
   box-sizing: border-box;
   width: 95%;
@@ -146,8 +145,13 @@ max-width: 50vw;
 }
 
 .alert-display {
-  visibility: visible;
   height: 5vh;
+  transition: height 2s ease-in-out;
+}
+
+
+.alert-undisplay {
+  height: 0;
   transition: height 2s ease-in-out;
 }
 

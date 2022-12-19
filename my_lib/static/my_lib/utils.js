@@ -47,13 +47,22 @@ export function createElementAndApplyProperties(elementType, properties) {
 export function displayAlert(element, elementClass, content) {
   element.textContent = content;
   element.classList.add('alert-display');
+  element.classList.remove('alert-undisplay');
   element.classList.add(elementClass);
+  setTimeout(
+    hideAlert,
+    4000,
+    element, 
+    elementClass
+  );
 }
 
 
-export function hideAlert(element, elementClass, content) {
+export function hideAlert(element, elementClass) {
+  console.log(element.classList);
   element.textContent = '';
   element.classList.remove('alert-display');
+  element.classList.add('alert-undisplay');
   element.classList.remove(elementClass);
 }
 
@@ -71,43 +80,33 @@ export function setCardsPerPage() {
 }
 
 export function changeArrowDisplay(element, status){
-  console.log(status)
   if (status) {
-    console.log('test pass');
     element.classList.add("enabled-arrow");
   } else {
       element.classList.remove("enabled-arrow");
       element.setAttribute('disabled', '');
   }
-  /*
-if (response['next_page']) {
-    rightArrow.classList.add("enabled-arrow");
-    rightArrow.addEventListener('click', () => {
-        url = url.replace(`page=${pageNum-1}`, `page=${pageNum}`);
-        response = function() {
-         fetch(url)
-         .then(response => response.json());
-        };
-     });
-} else {
-    rightArrow.classList.remove("enabled-arrow");
-    rightArrow.setAttribute('disabled', '');
 }
 
-document.querySelector('#books-container').innerHTML = '';
-response['booklist'].forEach(book => {
-document.querySelector('#books-container').appendChild(
-    generateBookCard(
-        book,
-        bookSheet,
-        response.connected
-    ));
-});
-
-url = url.replace(`page=${pageNum+1}`, `page=${pageNum}`);
-        response = function() {
-            fetch(url)
-            .then(response => response.json());
-        };
-        */
+export function setRate(note, book) {
+  fetch(`set-rate/${book['id']}`, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+          note: note,
+      }),
+      headers: {
+          "X-CSRFToken": getCookie("csrftoken")
+      }
+    })
+    .then(response => response.json())
+    .then(user => console.log(user))
+    .catch(error => {
+      console.log('Error: ', error);
+      let content = 'An error occurs, please try to reload page';
+      displayAlert(alert, 'alert-danger', content);
+      setTimeout(function() {
+          hideAlert(alert, 'alert-danger', content);
+      }, 4000);
+    });
 }
