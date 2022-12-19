@@ -50,8 +50,11 @@ body {
 
 .card-inner-container {
   flex-grow: 1;
+  display: flex;
+  justify-content: space-around;
   padding: 20px;
   height: 91%;
+  flex-wrap: wrap;
   /* version mobile
   max-width: 75%;
   */
