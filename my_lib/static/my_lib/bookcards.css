@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'NotoSerifBold';
+  src: local('NotoSerifBold'),
+       url('../my_lib/fonts/NotoSerif-Bold.ttf') format("truetype");
+}
+
 .bookcard {
     display: flex;
     margin: 1vw;
@@ -5,21 +11,35 @@
     max-height: 150px;
     width: 40vw;
     min-width: 300px;
-    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.50);
+    box-shadow: 10px 10px 5px rgba(93,166,104, 0.50);
     border-radius: 25px;
+    font-size: 0.8rem;
+    background-color: #5da668;
+  }
+
+  .bg-light-red {
+    background-color: #f26052;
+  }
+
+  .bg-light-green {
+    background-color: #79d988;
+  }
+
+  .bg-dark-green {
+    background-color: #5da668;
   }
   
   .bookcard-header {
     width: 33%;
     height: 100%;
-    border-right: 1px solid black;
+    border-radius: 25px 0 0 25px;
   }
   
   .bookcard-body {
     width: 65%;
     height: 100%;
     border-radius: 0 25px 25px 0;
-    background-color: red;
+    background-color: #5da668;
     z-index: 2;
     flex-shrink: 1;
   }
@@ -32,6 +52,9 @@
     flex-direction: column;
     justify-content: space-evenly;
     z-index: 1;
+    background-color: #5da668;
+    border-radius: 0 25px 25px 0;
+    padding-right: 1rem;
   }
   
   .bookcard-panel-buttons:hover {
@@ -40,9 +63,21 @@
   }
   
   .addlist-button {
-    height: 20%;
     border-radius: 50px;
     overflow: hidden;
+    min-width: 20px;
+    max-height: 20px;
+    border: 1px solid #f2e9e9;
+    background-color: #f2e9e9;
+    color: #f26052;
+    font-family: 'NotoSerifBold', 'Times New Roman', Times, serif;
+  }
+  
+  .addlist-button:hover {
+    background-color: #f26052;
+    border: 1px solid #f2e9e9;
+    cursor: pointer;
+    color: #f2e9e9;
   }
 
 /******************************************************/
@@ -67,7 +102,7 @@
 
 .bookview-author {
   height: 5%;
-  color: lightgray;
+  color: #f2e9e9;
   text-align: center;
   margin-bottom: 2%;
 }
@@ -111,7 +146,29 @@
 }
 
 .star-span {
-  font-size: 2em;
+  font-size: 1.2rem;
   cursor: pointer;
-  color: yellow;
+  color: #f2a341;
 }
+
+/*******************************************************/
+
+/* Card's button */
+
+.button-inner-card{
+  margin-right: 10px;
+  padding: 5px 15px;
+  border-radius: 25px;
+  border: 1px solid #f2e9e9;
+  background-color: #f2e9e9;
+  color: #f26052;
+  font-family: 'NotoSerifBold', 'Times New Roman', Times, serif;
+}
+
+.button-inner-card:hover {
+  background-color: #f26052;
+  border: 1px solid #f2e9e9;
+  cursor: pointer;
+  color: #f2e9e9;
+}
+  

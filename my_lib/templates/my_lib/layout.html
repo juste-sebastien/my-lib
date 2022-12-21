@@ -5,9 +5,7 @@
     <head>
         <title>{% block title %}My Lib'{% endblock %}</title>
         <link href="{% static 'my_lib/styles.css' %}" rel="stylesheet">
-        <link href="{% static 'my_lib/dropdown.css' %}" rel="stylesheet">
         <link href="{% static 'my_lib/bookcards.css' %}" rel="stylesheet">
-        <link href="{% static 'my_lib/library.css' %}" rel="stylesheet">
         {% block script %}
         {% endblock %}
     </head>
@@ -18,29 +16,29 @@
         <nav class="navbar">
             <ul class="inner-nav">
             {% if user.is_authenticated %}
-                <li class="">
-                    <a class="" href="{% url 'profile' 'my-profile'%}"><strong>{{ user.username }}</strong></a>
+                <li class="inner-nav-li">
+                    <a class="link" href="{% url 'profile' 'my-profile'%}"><strong>{{ user.username }}</strong></a>
                 </li>
             {% endif %}
-            <li class="">
-                <a class="" id="link-home" href="{% url 'index' %}">Home</a>
+            <li class="inner-nav-li">
+                <a class="link" id="link-home" href="{% url 'index' %}">Home</a>
             </li>
             {% if user.is_authenticated %}
-                <li class="">
-                    <a class="" id="link-library" href="{% url 'library' %}">My Library</a>
+                <li class="inner-nav-li">
+                    <a class="link" id="link-library" href="{% url 'library' %}">My Library</a>
                 </li>
-                <li class="">
-                    <a class="" id="link-recommendator" href="{% url 'recommendator' %}">Recommandator</a>
+                <li class="inner-nav-li">
+                    <a class="link" id="link-recommendator" href="{% url 'recommendator' %}">Recommandator</a>
                 </li>
-                <li class="">
-                    <a class="" href="{% url 'logout' %}">Log Out</a>
+                <li class="inner-nav-li">
+                    <a class="link" href="{% url 'logout' %}">Log Out</a>
                 </li>
             {% else %}
-                <li class="">
-                    <a class="" href="{% url 'login' %}">Log In</a>
+                <li class="inner-nav-li">
+                    <a class="link" href="{% url 'login' %}">Log In</a>
                 </li>
-                <li class="">
-                    <a class="" href="{% url 'register' %}">Register</a>
+                <li class="inner-nav-li">
+                    <a class="link" href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
             </ul>

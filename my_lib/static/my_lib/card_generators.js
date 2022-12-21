@@ -224,7 +224,8 @@ export function generateBookCard(book, sheet, alertElement) {
     ]);
 
     const viewMore = createElementAndApplyProperties('button', [
-        { name: 'textContent', value: 'View More' }
+        { name: 'textContent', value: 'View More' },
+        { name: 'className', value: 'button-inner-card' }
     ]);
 
     viewMore.addEventListener('click', () => {

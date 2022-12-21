@@ -7,6 +7,24 @@ import {
 } from "./sheet_generators.js"
 
 document.addEventListener('DOMContentLoaded', function() {
+  if ( document.body.contains(document.getElementById("link-library"))) {
+    document.querySelector('#link-home').addEventListener('click', () => {
+      document.querySelector('#link-home').classList.add('link-active');
+      document.querySelector('#link-library').classList.remove('link-active');
+      document.querySelector('#link-recommendator').classList.remove('link-active');
+    });
+
+    document.querySelector('#link-library').addEventListener('click', () => {
+      document.querySelector('#link-home').classList.remove('link-active');
+      document.querySelector('#link-library').classList.add('link-active');
+      document.querySelector('#link-recommendator').classList.remove('link-active');
+    });
+    document.querySelector('#link-recommendator').addEventListener('click', () => {
+      document.querySelector('#link-home').classList.remove('link-active');
+      document.querySelector('#link-library').classList.remove('link-active');
+      document.querySelector('#link-recommendator').classList.add('link-active');
+    });
+  }
 
 });
 
