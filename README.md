@@ -1,6 +1,6 @@
 # My Lib'
 ***
-
+©Copyright 2022 Sébastien Juste 
 
 ## Table of Contents
 1. [Video Demo](#video-demo)
@@ -12,9 +12,9 @@
 7. [Features](#features)
 8. [Contributing](#contributing)
 
-#### Video Demo: [click here for the result](https://youtu.be/jzZUt5rgwss)
+#### Video Demo: 
 ***
-
+[click here for the result](https://youtu.be/jzZUt5rgwss)
 
 #### Description:
 ***
@@ -23,6 +23,8 @@ My Lib' is an library to store your books. You can rate them and add or remove t
 
 #### Distinctiveness and Complexity:
 ***
+A book is complex to modelize. There is author, pages, editor, and genre. But a library, contains books and readers. 
+
 The recommendation system is currently based on others users rates, the books category, the author, the publication year, and page number. In a few, you can add some tags to book, and recommendator will take care of them to recommend books.
 
 
@@ -73,6 +75,7 @@ Now open your brower and go there
 - [ ] Add tags to book and put them in recommendator
 - [ ] Populate DB with Selenium
 - [ ] Style all elements
+- [ ] Add comments to book
 
 #### Contributing
 ***
