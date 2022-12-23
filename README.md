@@ -22,6 +22,7 @@ My Lib' is an library to store your books. You can rate them and add or remove t
 
 
 #### Distinctiveness and Complexity:
+***
 The recommendation system is currently based on others users rates, the books category, the author, the publication year, and page number. In a few, you can add some tags to book, and recommendator will take care of them to recommend books.
 
 
