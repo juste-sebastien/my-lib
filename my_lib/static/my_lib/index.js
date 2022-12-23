@@ -47,6 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(response => {
             console.log(response);
+            console.log(pageNum);
             const leftArrow = document.querySelector('#search-left-arrow');
             const rightArrow =document.querySelector('#search-right-arrow');
             changeArrowDisplay(leftArrow, response['previous_page']);
@@ -54,12 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
             leftArrow.addEventListener('click', () => {
                 if (pageNum > 1) {
                     pageNum--;
+                    console.log(pageNum);
                 }
                 getResearch(research); 
             });
             rightArrow.addEventListener('click', () => {
                 if (pageNum < response['total_pages']) {
-                pageNum++;
+                    pageNum++;
+                    console.log(pageNum);
                 }
                 getResearch(research);
             });
@@ -76,8 +79,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         })
         .then(() => {
-            document.querySelector('#author-radio').checked = false;
-            document.querySelector('#bookname-radio').checked = false;
             document.querySelector('#search-input').value = '';
         })
         .catch(error => {

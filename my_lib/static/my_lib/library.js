@@ -74,12 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Error: ', error);
             let content = 'An error occurs, please try to reload page';
             displayAlert(alert, 'alert-danger', content);
-            setTimeout(
-                hideAlert,
-                4000,
-                alert, 
-                'alert-danger'
-            );
         });
     };
 });

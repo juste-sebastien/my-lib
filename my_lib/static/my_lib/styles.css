@@ -14,7 +14,7 @@
 * {
 
   font-family: 'NotoSerif', 'Times New Roman', Times, serif;
-  font-size: 1em;
+  font-size: 1.2vmax;
   box-sizing: border-box;
 }
 
@@ -47,7 +47,7 @@
 .title {
   font-family: 'SpaceGrotesk', Arial, Helvetica, sans-serif;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.6vmax;
   padding: 0 1vw;
 }
 
@@ -114,6 +114,7 @@ input:hover {
 .card-inner-container {
   flex-grow: 1;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   padding: 20px;
   height: 91%;
@@ -169,7 +170,6 @@ input:hover {
   height: 40px;
   justify-content: space-evenly;
   margin: 0.5vh 0;
-  font-size: 1rem;
 }
 
 #search-container input[type*="text"] {
@@ -189,7 +189,6 @@ input:hover {
   width: 25%;
   cursor: pointer;
   line-height: 2;
-  font-size: 1em;
 }
 .option-input {
   clip: rect(0 0 0 0); 
@@ -205,15 +204,15 @@ input:hover {
 }
 .option-input + .checkmark:before {
   content: '';
-  width: 1em;
-  height: 1em;
-  border-radius: 1em;
+  width: 1vw;
+  height: 1vw;
+  border-radius: 1vw;
   display: inline-block;
-  border: 0.125em solid #fff;
+  border: 0.125vw solid #fff;
   transition: 0.5s ease all;
-  vertical-align: -0.25em;
-  box-shadow: 0 0 0 0.15em #5da668;
-  margin-right: 0.75em;
+  vertical-align: -0.25vw;
+  box-shadow: 0 0 0 0.15vw #5da668;
+  margin-right: 0.75vw;
 }
 
 
@@ -257,13 +256,11 @@ a {
   display: flex;
   justify-content: space-around;
   list-style: none;
-  font-size: 1rem;
 }
 
 .link {
   cursor: pointer;
   padding: 5px;
-  font-size: 1.2rem;
 }
 
 .link:hover {
@@ -327,4 +324,63 @@ a {
     -webkit-box-shadow: 0px 20px 60px 10px rgba(242,96,82,0.75);
     -moz-box-shadow: 0px 20px 60px 10px rgba(242,96,82, 0.75);
 
+}
+
+
+/*******************************************************/
+/*******************************************************/
+/*******************************************************/
+
+/* Media queries */
+
+
+@media screen and (max-width: 1007px) {
+
+  * {
+    font-size: 2.7vmax;
+  }
+
+  .title {
+    font-size: 3vmax;
+  }
+
+  
+  .arrow {
+    font-size: 5rem;
+  }
+  
+  
+  .card-inner-container {
+    max-width: 75%;
+  }
+
+  /**** Search cointainer ****/
+
+  #search-container {
+    height: 30%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  #search-container input[type*="text"] {
+    width: 60%;
+  }
+  
+  .radio-container {
+    width: 60%;
+    flex-flow: row wrap;
+  }
+  
+  .radio-container label {
+    width: 40%;
+  }
+
+
+  .navbar {
+    flex-grow: 0.8;
+    max-width: 80vw;
+    margin: 0;
+  }
+
+  
 }
