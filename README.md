@@ -12,18 +12,20 @@
 7. [Features](#features)
 8. [Contributing](#contributing)
 
+
 #### Video Demo: 
 ***
-[click here for the result](https://youtu.be/jzZUt5rgwss)
+[click here for the result](https://youtu.be/wea1li-XPK4)
+
 
 #### Description:
 ***
-My Lib' is an library to store your books. You can rate them and add or remove them to different lists. You can also use the recommendator to have the possibility to discover new books.
+My Lib' is a library to store your books.Begin to search a book by his author or by his title and read all information about it. Like you can view new movies and series in Netflix, you can discover new books on My Lib'. You can rate them and add or remove them to different lists.
 
 
 #### Distinctiveness and Complexity:
 ***
-A book is complex to modelize. There is author, pages, editor, and genre. But a library, contains books and readers. 
+A book is complex to modelize. There is author, pages, editor, and genre. But a library, contains books and readers. Each reader can store many books in 4 different lists. 
 
 The recommendation system is currently based on others users rates, the books category, the author, the publication year, and page number. In a few, you can add some tags to book, and recommendator will take care of them to recommend books.
 
@@ -35,7 +37,7 @@ Python 3.6+
 
 #### Installation
 ***
-Please read [requirements.txt](https://github.com/juste-sebastien/mail/blob/master/requirements.txt) to get all libs using with this project and use the package manager [pip](https://pip.pypa.io/en/stable/) to install them.
+Please read [requirements.txt](https://github.com/juste-sebastien/my-lib/blob/master/requirements.txt) to get all libs using with this project and use the package manager [pip](https://pip.pypa.io/en/stable/) to install them.
 
 ```bash
 git clone https://github.com/juste-sebastien/my-lib
@@ -73,7 +75,8 @@ Now open your brower and go there
 #### Features
 ***
 - [ ] Add tags to book and put them in recommendator
-- [ ] Populate DB with Selenium
+- [ ] Populate DB 
+- [ ] Write tests with Selenium
 - [ ] Style all elements
 - [ ] Add comments to book
 
