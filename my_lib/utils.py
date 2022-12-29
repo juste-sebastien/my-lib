@@ -77,5 +77,4 @@ def get_book_recommendation_note(book, user):
         book_note += book.publication / user.average_publication * 10 * 2 
     if book.page_nbr != None:
         book_note += Decimal(book.page_nbr) / Decimal(user.average_readings_page) * 10 * 5
-    
     return book_note

@@ -342,8 +342,6 @@ def get_list(request):
         
     try:
         p = Paginator(booklist, per_page) 
-        print(p)
-        print(p.count)
     except EmptyPage:
         num_pages = 0
         previous = False
@@ -423,7 +421,6 @@ def get_recommendation(request):
     per_page =  request.GET.get("per-page")
     recommendated_list = []
     genre_list = []
-    
     for book in temp_booklist:
         for genre in book.genre.all():
             if genre.id not in genre_list:
@@ -431,11 +428,10 @@ def get_recommendation(request):
 
     for genre in genre_list:
         current_list = Book.objects.filter(genre=genre)
-    
         for book in current_list.all():
             current_book_note = get_book_recommendation_note(book, user) + 50
             current_book_note = current_book_note / 140 * 100
-            if current_book_note >= 80 and book not in temp_booklist:
+            if current_book_note >= 70 and book not in temp_booklist:
                 try:
                     note = Note.objects.get(user=user.id, book=book.id)
                 except Note.DoesNotExist:
@@ -456,13 +452,10 @@ def get_recommendation(request):
                 book["is_in_stars"] = is_in_stars
                 book["note"] = note
                 book["author"] =  author
-            
                 recommendated_list.append(book)
         
     try:
         p = Paginator(recommendated_list, per_page)
-        print(p)
-        print(p.count)
     except EmptyPage:
         num_pages = 0
         previous = False
