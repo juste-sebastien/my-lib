@@ -8,35 +8,35 @@ import {
 
 var pageNum = 1;
 var cardsPerPage = setCardsPerPage();
-console.log(cardsPerPage, typeof(cardsPerPage));
 
 document.addEventListener('DOMContentLoaded', function() {
     const linkReadings = document.querySelector('#link-readings');
     linkReadings.addEventListener('click', () => {
-        loadList('readings');
+        loadList('readings', 1);
     });
 
     const linkRead = document.querySelector('#link-read');
     linkRead.addEventListener('click', () => {
-        loadList('read');
+        loadList('read', 1);
     });
 
     const linkToread = document.querySelector('#link-toread');
     linkToread.addEventListener('click', () => {
-        loadList('toread');
+        loadList('toread', 1);
     });
 
     const linkStars = document.querySelector('#link-stars');
     linkStars.addEventListener('click', () => {
-        loadList('stars');
+        loadList('stars', 1);
     });
 
     const bookSheet = document.querySelector('#book-sheet');
     const alert = document.querySelector('#alert-comment');
 
-    function loadList(name) {
+    function loadList(name, currentPage) {
         var url = `/get-list/?list=${name}`;
-        url = url.concat(`&page=${pageNum}`);
+        console.log('inloadlist', currentPage);
+        url = url.concat(`&page=${currentPage}`);
         url = url.concat(`&per-page=${cardsPerPage}`);
 
         fetch(url)
@@ -47,14 +47,16 @@ document.addEventListener('DOMContentLoaded', function() {
             changeArrowDisplay(leftArrow, response['previous_page']);
             changeArrowDisplay(rightArrow, response['next_page']);
             leftArrow.addEventListener('click', () => {
+                console.log('inleft event', pageNum);
                 if (pageNum > 1) {
-                    pageNum--;
+                    pageNum -= 1;
                 }
                 loadList(name, pageNum);   
             });
             rightArrow.addEventListener('click', () => {
+                console.log('in right event', pageNum);
                 if (pageNum < response['total_pages']) {
-                pageNum++;
+                pageNum +=1;
                 }
                 loadList(name, pageNum)
             });

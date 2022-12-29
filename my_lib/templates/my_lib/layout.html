@@ -6,43 +6,43 @@
         <title>{% block title %}My Lib'{% endblock %}</title>
         <link href="{% static 'my_lib/styles.css' %}" rel="stylesheet">
         <link href="{% static 'my_lib/bookcards.css' %}" rel="stylesheet">
+        <script>
+
+            function openNav() {
+            var size = "60vw";
+            if (window.innerWidth <= 1007) {
+                size = "100vw";
+            }
+            document.getElementById("my-side-nav").style.width = size;
+            }
+
+            function closeNav() {
+            console.log('close');
+            document.getElementById("my-side-nav").style.width = "0";
+            }
+        </script>
         {% block script %}
         {% endblock %}
     </head>
     <div class="alert" id="alert-comment"></div>
     <div class="header">
-        <h1><a class="" href="#">My Lib'</a></h1>
-        
-        <nav class="navbar">
-            <ul class="inner-nav">
+        <h1><a class="" href="#"><img class="logo" src="{% static 'my_lib/img/dessin.svg' %}" alt="My Lib'"></a></h1>
+        <nav class="sidenav" id="my-side-nav">
+            <a href="javascript:void(0)" class="closebtn" id="close-nav-cross" onclick="closeNav()">&times;</a>
             {% if user.is_authenticated %}
-                <li class="inner-nav-li">
-                    <a class="link" href="{% url 'profile' 'my-profile'%}"><strong>{{ user.username }}</strong></a>
-                </li>
+                <a class="link" href="{% url 'profile' 'my-profile'%}"><strong>{{ user.username }}</strong></a>
             {% endif %}
-            <li class="inner-nav-li">
                 <a class="link" id="link-home" href="{% url 'index' %}">Home</a>
-            </li>
             {% if user.is_authenticated %}
-                <li class="inner-nav-li">
-                    <a class="link" id="link-library" href="{% url 'library' %}">My Library</a>
-                </li>
-                <li class="inner-nav-li">
-                    <a class="link" id="link-recommendator" href="{% url 'recommendator' %}">Recommandator</a>
-                </li>
-                <li class="inner-nav-li">
-                    <a class="link" href="{% url 'logout' %}">Log Out</a>
-                </li>
+                <a class="link" id="link-library" href="{% url 'library' %}">My Library</a>
+                <a class="link" id="link-recommendator" href="{% url 'recommendator' %}">Recommandator</a>
+                <a class="link" href="{% url 'logout' %}">Log Out</a>
             {% else %}
-                <li class="inner-nav-li">
-                    <a class="link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="inner-nav-li">
-                    <a class="link" href="{% url 'register' %}">Register</a>
-                </li>
+                <a class="link" href="{% url 'login' %}">Log In</a>
+                <a class="link" href="{% url 'register' %}">Register</a>
             {% endif %}
-            </ul>
         </nav>
+        <span class="burger title" onclick="openNav()">Menu &#9776;</span>
     </div>
     <body class="body">
         {% block body %}

@@ -4,6 +4,7 @@
        url('../my_lib/fonts/NotoSerif-Bold.ttf') format("truetype");
 }
 
+
 .bookcard {
     display: flex;
     margin: 1vw;
@@ -13,8 +14,12 @@
     min-width: 300px;
     box-shadow: 10px 10px 5px rgba(93,166,104, 0.50);
     border-radius: 25px;
-    font-size: 0.8rem;
+    font-size: 0.5vw;
     background-color: #5da668;
+  }
+
+  .card-title {
+    font-size: 1vw;
   }
 
   .bg-light-red {
@@ -66,7 +71,7 @@
     border-radius: 50px;
     overflow: hidden;
     min-width: 20px;
-    max-height: 20px;
+    max-height: 25px;
     border: 1px solid #f2e9e9;
     background-color: #f2e9e9;
     color: #f26052;
@@ -170,5 +175,19 @@
   border: 1px solid #f2e9e9;
   cursor: pointer;
   color: #f2e9e9;
+}
+
+
+/*******************************************************/
+/*******************************************************/
+/*******************************************************/
+
+/* Media queries */
+
+@media screen and (max-width: 1007px) {
+  .bookview-info-container {
+    flex-wrap: wrap;
+    height: 15%;
+  }
 }
   

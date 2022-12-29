@@ -40,7 +40,8 @@ export function generateBookCard(book, sheet, alertElement) {
     const topInfo = createElementAndApplyProperties('div', []);
 
     const title = createElementAndApplyProperties('div', [
-        { name: 'textContent', value: `${book['title']}`}
+        { name: 'textContent', value: `${book['title']}`},
+        { name: 'className', value: 'card-title'}
     ]);
 
     var rate = 0;

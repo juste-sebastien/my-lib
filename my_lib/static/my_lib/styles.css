@@ -14,7 +14,6 @@
 * {
 
   font-family: 'NotoSerif', 'Times New Roman', Times, serif;
-  font-size: 1.2vmax;
   box-sizing: border-box;
 }
 
@@ -34,6 +33,12 @@
   max-height: 100px;
 }
 
+.logo {
+  height: 18vh;
+  width: auto;
+  fill: #5da668 !important;
+}
+
 .main-container  {
   display: flex;
   flex-direction: column;
@@ -47,7 +52,7 @@
 .title {
   font-family: 'SpaceGrotesk', Arial, Helvetica, sans-serif;
   font-weight: bold;
-  font-size: 1.6vmax;
+  font-size: 2rem;
   padding: 0 1vw;
 }
 
@@ -98,7 +103,7 @@ input:hover {
 .arrow {
   font-size: 5rem;
   transform: scale(0.6, 2.8);
-  z-index: 5;
+
   max-width: 10%;
   border: 0 solid transparent;
   background-color: transparent;
@@ -116,6 +121,7 @@ input:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  align-items: center;
   padding: 20px;
   height: 91%;
   flex-wrap: wrap;
@@ -169,7 +175,9 @@ input:hover {
   display: flex;
   height: 40px;
   justify-content: space-evenly;
-  margin: 0.5vh 0;
+  align-items: center;
+  margin: 1.5vh 0;
+
 }
 
 #search-container input[type*="text"] {
@@ -186,13 +194,14 @@ input:hover {
   display: flex;
   flex-flow: row nowrap;
   height: 40px;
-  width: 25%;
+  width: 50%;
   cursor: pointer;
   line-height: 2;
 }
 .option-input {
   clip: rect(0 0 0 0); 
   position: absolute; 
+  width: 5vw;
 }
 
 .option-input + .checkmark {
@@ -232,6 +241,7 @@ a {
   text-decoration: none;
   color:#5da668;
   padding: 5px;
+  font-size: 2vmin;
 }
 
 .inner-nav {
@@ -285,6 +295,54 @@ a {
   border-radius: 25px;
 }
 
+
+/* Side Bar */
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav .link {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #f2e9e9;
+  display: block;
+  transition: 0.3s;
+  text-align: center;
+  margin: auto;
+  width: 50%;
+}
+
+.sidenav .link:hover {
+  color: #f2e9e9;
+  border: 1px solid #5da668;
+  background-color: #79d988;
+  border-radius: 25px;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+.burger {
+  cursor:pointer;
+  color: #5da668;
+}
+
 /*******************************************************/
 
 /* Alert comment */
@@ -328,6 +386,19 @@ a {
 
 
 /*******************************************************/
+
+/* Forms */
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+
+
+
+/*******************************************************/
 /*******************************************************/
 /*******************************************************/
 
@@ -336,20 +407,6 @@ a {
 
 @media screen and (max-width: 1007px) {
 
-  * {
-    font-size: 2.7vmax;
-  }
-
-  .title {
-    font-size: 3vmax;
-  }
-
-  
-  .arrow {
-    font-size: 5rem;
-  }
-  
-  
   .card-inner-container {
     max-width: 75%;
   }
@@ -383,4 +440,9 @@ a {
   }
 
   
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
 }
